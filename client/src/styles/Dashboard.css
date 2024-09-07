@@ -1,0 +1,190 @@
+/* Start Global Rules */
+/* * {
+  box-sizing: border-box;
+}
+body {
+  font-family: 'Open Sans', sans-serif;
+}
+a {
+  text-decoration: none;
+}*/
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+} 
+.dashboard-page {
+    background-color: #FFF;
+}
+
+.dash-container {
+    padding-left: 15px;
+    padding-right: 15px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Small */
+@media (min-width: 768px) {
+    .dash-container {
+        width: 750px;
+    }
+}
+
+/* Medium */
+@media (min-width: 992px) {
+    .dash-container {
+        width: 970px;
+    }
+}
+
+/* Large */
+@media (min-width: 1200px) {
+    .dash-container {
+        width: 1170px;
+    }
+}
+
+/* End Global Rules */
+
+/* Start Landing Page */
+.dashboard-page header {
+    min-height: 80px;
+    display: flex;
+}
+
+@media (max-width: 767px) {
+    .dashboard-page header {
+        min-height: auto;
+        display: initial;
+    }
+}
+
+.dashboard-page header .dash-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+@media (max-width: 767px) {
+    .dashboard-page header .dash-container {
+        flex-direction: column;
+        justify-content: center;
+    }
+}
+
+.dashboard-page header .logo {
+    color: #5d5d5d;
+    font-style: italic;
+    text-transform: uppercase;
+    font-size: 20px;
+}
+
+@media (max-width: 767px) {
+    .dashboard-page header .logo {
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+}
+
+.dashboard-page header .links {
+    display: flex;
+    align-items: center;
+}
+
+@media (max-width: 767px) {
+    .dashboard-page header .links {
+        text-align: center;
+        gap: 10px;
+    }
+}
+
+.dashboard-page header .links li {
+    margin-left: 30px;
+    color: #5d5d5d;
+    cursor: pointer;
+    transition: .3s;
+}
+
+@media (max-width: 767px) {
+    .dashboard-page header .links li {
+        margin-left: auto;
+    }
+}
+
+.dashboard-page header .links li:last-child {
+    border-radius: 20px;
+    padding: 10px 20px;
+    color: #FFF;
+    background-color: #ffffff;
+    text-decoration: solid;
+}
+
+.dashboard-page header .links li:not(:last-child):hover {
+    color: #6c63ff;
+}
+
+.dashboard-page .content .dash-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 140px;
+    min-height: calc(100vh - 80px);
+}
+
+@media (max-width: 767px) {
+    .dashboard-page .content .dash-container {
+        gap: 0;
+        min-height: calc(100vh - 101px);
+        justify-content: center;
+        flex-direction: column-reverse;
+    }
+}
+
+@media (max-width: 767px) {
+    .dashboard-page .content .info {
+        text-align: center;
+        margin-bottom: 15px
+    }
+}
+
+.dashboard-page .content .info h1 {
+    color: #5d5d5d;
+    font-size: 44px;
+}
+
+.dashboard-page .content .info p {
+    margin: 0;
+    line-height: 1.6;
+    font-size: 15px;
+    color: #5d5d5d;
+}
+
+.dashboard-page .content .info button {
+    border: 0;
+    border-radius: 20px;
+    padding: 12px 30px;
+    margin-top: 30px;
+    cursor: pointer;
+    color: #FFF;
+    background-color: #9a97dc;
+    font-weight: bold;
+    font-size: large;
+}
+
+.dashboard-page .content .image img {
+    max-width: 100%;
+}
+
+.dashboard-page__header .links button a {
+    text-decoration: none;
+    color: inherit;
+    /* Ensure the link color inherits from the button */
+}
+
+
+.logout-button {
+    background-color: #f44336;
+    /* Example style for logout button */
+    color: white;
+}

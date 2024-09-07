@@ -1,0 +1,52 @@
+.features,
+.why-use,
+.ai-tools,
+.contribute {
+    margin-bottom: 40px;
+}
+
+.features h2,
+.why-use h2,
+.ai-tools h2,
+.contribute h2 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.feature-card {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+}
+
+.feature-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.feature-card p {
+    font-size: 1rem;
+}
+@media (max-width: 768px) {
+    .header h1 {
+        font-size: 2rem;
+    }
+
+    .hero-content h2 {
+        font-size: 1.8rem;
+    }
+
+    .features h2,
+    .why-use h2,
+    .ai-tools h2,
+    .contribute h2 {
+        font-size: 1.6rem;
+    }
+}

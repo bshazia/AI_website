@@ -1,0 +1,32 @@
+{
+  "name": "your-app-name",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "start": "pm2 start server.js --name 'AI-Tools_app'",
+    "dev": "NODE_ENV=development node server.js",
+    "prod": "NODE_ENV=production pm2 start server.js --name 'ai_tools-app'",
+    "migrate": "npx sequelize-cli db:migrate",
+    "test": "mocha"
+  },
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "csurf": "^1.11.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-validator": "^7.2.0",
+    "helmet": "^7.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mysql2": "^3.11.0",
+    "openai": "^4.57.3",
+    "sanitize-html": "^2.13.0",
+    "xss-clean": "^0.1.4"
+  },
+  "devDependencies": {
+    "mocha": "^10.2.0",
+    "sequelize-cli": "^6.4.1"
+  }
+}

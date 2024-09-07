@@ -1,0 +1,47 @@
+/* src/styles/EntryPage.css */
+.entry-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgb(219, 242, 251);
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 40px;
+    width: 500px;
+    z-index: 1000;
+}
+
+.tabs-form {
+    display: flex;
+    border-bottom: 1px solid #0a40c8;
+    margin-bottom: 10px;
+}
+
+.tabs-form button {
+    flex: 1;
+    padding: 10px;
+    border: rgb(41, 31, 216);
+    background: transparent;
+    cursor: pointer;
+}
+
+.tabs button.active {
+    border-bottom: 2px solid #067dfb;
+}
+
+.form-container-e {
+    padding: 25%;
+}
+
+.close-btn-e {
+    background: #bad5f0;
+    border: 1px solid #024ef4;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+.form {
+   display: flex;
+}

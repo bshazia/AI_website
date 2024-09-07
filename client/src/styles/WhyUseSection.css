@@ -1,0 +1,22 @@
+.why-use ul {
+    list-style: disc;
+    padding-left: 20px;
+}
+@media (max-width: 768px) {
+
+
+    .why-use h2
+    {
+        font-size: 1.6rem;
+    }
+}
+
+.why-use h2
+ {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.why-use {
+    margin-bottom: 40px;
+}

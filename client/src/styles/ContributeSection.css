@@ -1,0 +1,19 @@
+.contribute p {
+    margin-top: 10px;
+}
+@media (max-width: 768px) {
+ 
+    .contribute h2 {
+        font-size: 1.6rem;
+    }
+}
+.contribute {
+    margin-bottom: 40px;
+}
+.contribute h2 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+.cta-button-r{
+    color: #d1320f;
+}

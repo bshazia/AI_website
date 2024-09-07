@@ -1,0 +1,37 @@
+.header {
+    text-align: center;
+    margin-bottom: 20px;
+    padding: 20px;
+}
+
+.header h1 {
+    font-size: 2.8rem;
+    margin-bottom: 10px;
+}
+
+.header nav {
+    margin-top: 10px;
+}
+
+.header .button {
+    background-color: #fff;
+    color: #0072ff;
+    padding: 10px 20px;
+    margin: 0 10px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.header .login-button:hover,
+.header .signup-button:hover {
+    background-color: #0072ff;
+    color: #fff;
+}
+@media (max-width: 768px) {
+    .header h1 {
+        font-size: 2rem;
+    }
+
+}
