@@ -1,5 +1,6 @@
 #!/bin/bash
+# Navigate to the project root
+cd ..
 
-# Navigate to the client directory and run tests
-cd client
+# Run client tests
 npm test

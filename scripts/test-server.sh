@@ -1,5 +1,6 @@
 #!/bin/bash
-
-# Navigate to the server directory and run tests
+# Navigate to the server directory
 cd server
-npx mocha
+
+# Run server tests
+npm test

@@ -1,0 +1,66 @@
+{
+  "name": "ai-tools-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server/server.js",
+  "scripts": {
+    "start:client": "react-scripts start",
+    "start:server": "cd server && NODE_ENV=development node server.js",
+    "build:client": "react-scripts build",
+    "start": "concurrently \"npm run start:client\" \"npm run start:server\"",
+    "prod": "NODE_ENV=production pm2 start server/server.js --name 'ai_tools-app'",
+    "migrate": "npx sequelize-cli db:migrate",
+    "test": "mocha"
+  },
+  "dependencies": {
+    "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "axios": "^1.7.7",
+    "bcrypt": "^5.1.1",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "csurf": "^1.11.0",
+    "dompurify": "^3.1.6",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-validator": "^7.2.0",
+    "helmet": "^7.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "lodash": "^4.17.21",
+    "mysql2": "^3.11.0",
+    "openai": "^4.57.3",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-helmet": "^6.1.0",
+    "react-router-dom": "^6.26.1",
+    "react-scripts": "5.0.1",
+    "sanitize-html": "^2.13.0",
+    "web-vitals": "^2.1.4",
+    "xss-clean": "^0.1.4"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "env-cmd": "^10.1.0",
+    "mocha": "^10.2.0",
+    "sequelize-cli": "^6.4.1"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

@@ -1,5 +1,9 @@
 #!/bin/bash
+# Navigate to the project root
+cd ..
 
-# Navigate to the client directory and start the React development server
-cd client
+# Install client dependencies
+npm install
+
+# Start the React client
 npm start
