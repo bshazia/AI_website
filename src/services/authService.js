@@ -1,10 +1,10 @@
 import axios from "axios";
 
 const API_URL = process.env.REACT_APP_API_URL;
-
+// console.log(API_URL);
 // Register user
 const register = async (userData, csrfToken) => {
-  const response = await axios.post(`${API_URL}/register`, userData, {
+  const response = await axios.post(`${API_URL}/api/register`, userData, {
     headers: {
       "Content-Type": "application/json",
       "X-CSRF-Token": csrfToken,
@@ -15,8 +15,7 @@ const register = async (userData, csrfToken) => {
 };
 
 const login = async (userData, csrfToken) => {
-  console.log("CSRF Token:", csrfToken); // Log the CSRF token
-  const response = await axios.post(`${API_URL}/login`, userData, {
+  const response = await axios.post(`${API_URL}/api/login`, userData, {
     headers: {
       "Content-Type": "application/json",
       "X-CSRF-Token": csrfToken,

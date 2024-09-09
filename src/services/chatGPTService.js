@@ -4,7 +4,7 @@ const API_URL = process.env.REACT_APP_API_URL;
 
 export const fetchCsrfToken = async () => {
   try {
-    const response = await axios.get(`${API_URL}/get-csrf-token`, {
+    const response = await axios.get(`${API_URL}/api/get-csrf-token`, {
       withCredentials: true, 
     });
     return response.data.csrfToken;
@@ -17,7 +17,7 @@ export const fetchCsrfToken = async () => {
 export const sendMessageToChatGPT = async (message, csrfToken) => {
   try {
     const response = await axios.post(
-      `${API_URL}/chat`,
+      `${API_URL}/api/chat`,
       { message }, 
       {
         headers: {

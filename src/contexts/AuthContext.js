@@ -15,7 +15,7 @@ export const AuthProvider = ({ children }) => {
 
   const getCsrfToken = async () => {
     const response = await axios.get(
-      `${process.env.REACT_APP_API_URL}/get-csrf-token`,
+      `${process.env.REACT_APP_API_URL}/api/get-csrf-token`,
       {
         withCredentials: true,
       }
@@ -27,7 +27,7 @@ export const AuthProvider = ({ children }) => {
     try {
       const csrfToken = await getCsrfToken();
       const response = await authService.login(userData, csrfToken);
-      localStorage.setItem("token", response.token); // Save the token in localStorage
+      localStorage.setItem("token", response.token); 
       setUser(response.user);
       setIsAuthenticated(true);
       navigate("/dashboard"); // Navigate to dashboard after login
@@ -40,7 +40,10 @@ export const AuthProvider = ({ children }) => {
   const register = async (userData) => {
     try {
       const csrfToken = await getCsrfToken();
-      await authService.register(userData, csrfToken);
+     const response = await authService.register(userData, csrfToken);
+       localStorage.setItem("token", response.token);
+       setUser(response.user);
+       setIsAuthenticated(true);
       navigate("/dashboard");
     } catch (error) {
       console.error("Registration failed", error);

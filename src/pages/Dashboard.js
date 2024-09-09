@@ -4,6 +4,7 @@ import { useNavigate, Link } from "react-router-dom"; // Import Link
 import { Helmet } from "react-helmet"; // Import Helmet for managing meta tags
 import { AuthContext } from "../contexts/AuthContext"; 
 import "../styles/Dashboard.css";
+import pic from "../images/001234.png";
 
 const Dashboard = () => {
   const { isAuthenticated, loading, logout } = useContext(AuthContext); // Add logout from AuthContext
@@ -72,10 +73,7 @@ const Dashboard = () => {
               <div dangerouslySetInnerHTML={{ __html: sanitizedContent }} />
             </div>
             <div className="image">
-              <img
-                src="https://i.postimg.cc/65QxYYzh/001234.png"
-                alt="Inspiration"
-              />
+              <img src={pic} alt="Inspiration" />
             </div>
           </div>
         </div>

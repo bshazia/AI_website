@@ -11,7 +11,7 @@ const useAuth = () => {
   const navigate = useNavigate();
 
   const getCsrfToken = async () => {
-    const response = await axios.get(`${API_URL}/get-csrf-token`, {
+    const response = await axios.get(`${API_URL}/api/get-csrf-token`, {
       withCredentials: true,
     });
     return response.data.csrfToken;
