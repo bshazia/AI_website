@@ -10,7 +10,9 @@ function ChatComponent() {
   const { response, handleSendMessage } = useChat();
   const [messages, setMessages] = useState([]);
   const [userMessage, setUserMessage] = useState("");
-  const [sidebarOpen, setSidebarOpen] = useState(false); // Sidebar state
+  const [sidebarOpen, setSidebarOpen] = useState(true); // Sidebar state
+  const [summarizedResponse, setSummarizedResponse] = useState(null); 
+
   const chatMessagesRef = useRef(null);
 
   const sendMessage = async () => {
@@ -52,6 +54,10 @@ function ChatComponent() {
         ...prevMessages,
         { sender: "AI 4.O", message: sanitizedResponse },
       ]);
+      // Update summarizedResponse with the first AI response
+      if (!summarizedResponse) {
+        setSummarizedResponse(sanitizedResponse);
+      }
     }
   }, [response]); // This will trigger when `response` is updated
 

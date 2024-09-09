@@ -39,9 +39,8 @@ const Dashboard = () => {
       <div className="dashboard-page">
         <header>
           <div className="dash-container">
-            <Link to="/" className="logo">
-              <b>AI</b> for <b>Gen Z</b>
-            </Link>
+            <b>AI For Gen Z</b>
+
             <ul className="dashboard-page__header links">
               <li>
                 <Link to="/imageservice">Image Tools</Link>

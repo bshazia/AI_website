@@ -1,0 +1,40 @@
+.rotate-container {
+    text-align: center;
+    margin: 20px;
+   
+}
+
+.editor-container {
+    position: relative;
+    display: inline-block;
+        
+}
+.canvas-container{
+width: fit-content;
+    height: inherit;
+}
+
+.controls {
+    margin-top: 10px;
+}
+
+.rotate-button,
+.download-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    margin: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.rotate-button:hover,
+.download-button:hover {
+    background-color: #0056b3;
+}
+
+input[type="file"] {
+    margin-bottom: 20px;
+}

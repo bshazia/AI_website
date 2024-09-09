@@ -1,9 +1,9 @@
 import React from "react";
 import "../styles/Chatgpt.css";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { useNavigate } from "react-router-dom";
 
-function ChatSidebar({ sidebarOpen, setSidebarOpen, messages }) {
-  const navigate = useNavigate(); // Initialize navigate
+function ChatSidebar({ sidebarOpen, setSidebarOpen, summarizedResponse }) {
+  const navigate = useNavigate();
 
   const handleBack = () => {
     navigate("/dashboard"); // Navigate back to dashboard
@@ -11,12 +11,6 @@ function ChatSidebar({ sidebarOpen, setSidebarOpen, messages }) {
 
   return (
     <div className={`sidebar ${sidebarOpen ? "open" : ""}`}>
-      <button
-        className="sidebar-toggle"
-        onClick={() => setSidebarOpen(!sidebarOpen)}
-      >
-        {sidebarOpen ? "Close History" : "Open History"}
-      </button>
 
       {/* Back Button to navigate to the dashboard */}
       <button className="back-button" onClick={handleBack}>
@@ -26,11 +20,11 @@ function ChatSidebar({ sidebarOpen, setSidebarOpen, messages }) {
       <div className="chat-history">
         <h3>Chat History</h3>
         <ul>
-          {messages.map((msg, index) => (
-            <li key={index}>
-              <strong>{msg.sender}:</strong> {msg.message}
+          {summarizedResponse && (
+            <li>
+              <strong>AI 4.O:</strong> {summarizedResponse}
             </li>
-          ))}
+          )}
         </ul>
       </div>
     </div>

@@ -1,0 +1,34 @@
+.crop-container {
+    text-align: center;
+    margin: 20px;
+}
+
+.editor-container {
+    position: relative;
+    display: inline-block;
+}
+
+.controls {
+    margin-top: 10px;
+}
+
+.zoom-button,
+.download-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    margin: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.zoom-button:hover,
+.download-button:hover {
+    background-color: #0056b3;
+}
+
+input[type="file"] {
+    margin-bottom: 20px;
+}
