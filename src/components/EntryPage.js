@@ -32,10 +32,10 @@ const EntryPage = ({ className, onClose, initialView = "login" }) => {
             Register
           </button>
         </div>
-        <div className="form-container-e">
+        <div className="form-container">
           {currentView === "login" ? <LoginForm /> : <RegisterForm />}
         </div>
-        <button className="close-btn-e" onClick={onClose}>
+        <button className="close-btn" onClick={onClose}>
           Close
         </button>
       </div>

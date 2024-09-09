@@ -1,7 +1,8 @@
 import { useState, useContext } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 import DOMPurify from "dompurify";
-import { escapeHtml } from "../utils/securityUtils"; // Ensure you have this utility
+import { escapeHtml } from "../utils/securityUtils"; 
+import "../styles/form.css";
 
 const LoginForm = () => {
   const { login } = useContext(AuthContext);
@@ -61,7 +62,7 @@ const LoginForm = () => {
         placeholder="Password"
       />
       {passwordError && <div className="error">{passwordError}</div>}
-      <button type="submit">Login</button>
+      <button className="btn-submit" type="submit">Login</button>
     </form>
   );
 };
