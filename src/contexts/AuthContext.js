@@ -8,7 +8,6 @@ export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
-
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true); // Add loading state
@@ -27,10 +26,10 @@ export const AuthProvider = ({ children }) => {
     try {
       const csrfToken = await getCsrfToken();
       const response = await authService.login(userData, csrfToken);
-      localStorage.setItem("token", response.token); 
+      localStorage.setItem("token", response.token);
       setUser(response.user);
       setIsAuthenticated(true);
-      navigate("/dashboard"); // Navigate to dashboard after login
+      navigate("/dashboard");
     } catch (error) {
       console.error("Login failed", error);
       setIsAuthenticated(false);
@@ -40,13 +39,26 @@ export const AuthProvider = ({ children }) => {
   const register = async (userData) => {
     try {
       const csrfToken = await getCsrfToken();
-     const response = await authService.register(userData, csrfToken);
-       localStorage.setItem("token", response.token);
-       setUser(response.user);
-       setIsAuthenticated(true);
-      navigate("/dashboard");
+      await authService.register(userData, csrfToken);
+      navigate("/check-email"); // Navigate to a page informing user to check email
     } catch (error) {
       console.error("Registration failed", error);
+    }
+  };
+
+  const verifyEmail = async (token) => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_URL}/api/verify-email?token=${token}`
+      );
+      if (response.status === 200) {
+        navigate("/dashboard"); // Redirect to dashboard on success
+      } else {
+        navigate("/error"); // Redirect to an error page
+      }
+    } catch (error) {
+      console.error("Email verification failed", error);
+      navigate("/error");
     }
   };
 
@@ -59,17 +71,24 @@ export const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    // Check if token is in localStorage
     const token = localStorage.getItem("token");
     if (token) {
       setIsAuthenticated(true);
     }
-    setLoading(false); // Set loading to false after checking
+    setLoading(false);
   }, []);
 
   return (
     <AuthContext.Provider
-      value={{ user, isAuthenticated, loading, login, register, logout }}
+      value={{
+        user,
+        isAuthenticated,
+        loading,
+        login,
+        register,
+        logout,
+        verifyEmail,
+      }}
     >
       {children}
     </AuthContext.Provider>

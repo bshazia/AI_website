@@ -1,8 +1,10 @@
 import { useState, useContext } from "react";
+import { Link } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthContext";
 import DOMPurify from "dompurify";
 import { escapeHtml } from "../utils/securityUtils"; 
 import "../styles/form.css";
+
 
 const LoginForm = () => {
   const { login } = useContext(AuthContext);
@@ -47,23 +49,29 @@ const LoginForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input
-        type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        placeholder="Email"
-      />
-      {emailError && <div className="error">{emailError}</div>}
-      <input
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        placeholder="Password"
-      />
-      {passwordError && <div className="error">{passwordError}</div>}
-      <button className="btn-submit" type="submit">Login</button>
-    </form>
+    <div>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="Email"
+        />
+        {emailError && <div className="error">{emailError}</div>}
+        <input
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="Password"
+        />
+        {passwordError && <div className="error">{passwordError}</div>}
+        <button className="btn-submit" type="submit">
+          Login
+        </button>
+      </form>
+      <Link to="/forgot-password">Forgot your password?</Link>{" "}
+      {/* Link to forgot password page */}
+    </div>
   );
 };
 

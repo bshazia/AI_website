@@ -4,7 +4,7 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background: rgba(26, 70, 90, 0.8);
+    background: rgba(0, 0, 0, 0.99);
     z-index: 1000;
     padding: 20px;
     display: inline-flex;
@@ -33,7 +33,7 @@
     border: rgb(41, 31, 216);
     background: transparent;
     cursor: pointer;
-    color: rgb(3, 26, 46);
+    color: rgb(221, 224, 226);
     font-weight: bolder;
     font-size: large;
 }
@@ -53,6 +53,8 @@
     border-radius: 4px;
     cursor: pointer;
     margin-top: 10px;
+    color: rgb(221, 224, 226);
+
 }
 /* 
 .form input {

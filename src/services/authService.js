@@ -30,10 +30,33 @@ const logout = () => {
   localStorage.removeItem("token"); // Remove JWT token from local storage
 };
 
+const forgotPassword = async (email, csrfToken) => {
+  try {
+    const response = await axios.post(
+      `${API_URL}/api/forgot-password`,
+      { email },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRF-Token": csrfToken,
+        },
+        withCredentials: true, // Ensure cookies are sent with the request
+      }
+    );
+    return response.data;
+  } catch (error) {
+    throw new Error(
+      error.response?.data?.message ||
+        "An error occurred while processing your request."
+    );
+  }
+};
+
 const authService = {
   register,
   login,
   logout,
+  forgotPassword,
 };
 
 export default authService;

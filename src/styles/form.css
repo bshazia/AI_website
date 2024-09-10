@@ -20,11 +20,15 @@ form input[type="text"],
 form input[type="password"],
 form input[type="email"]{
     border: solid 2px #1B9CFC;
-    color: #01040b;
+    color: #c1c2c3;
     
     
 }
-
+.error {
+    color: red;
+    font-size: 12px;
+    margin-top: 5px;
+}
 .btn-submit {
     border: solid 2px #55E6C1;
     box-sizing: border-box;

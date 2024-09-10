@@ -13,6 +13,8 @@ const RegisterForm = () => {
   const [nameError, setNameError] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+
 
   const validateEmail = (email) => {
     // Basic email validation
@@ -45,7 +47,15 @@ const RegisterForm = () => {
         name: sanitizeInput(name),
         email: sanitizeInput(email),
         password: sanitizeInput(password),
-      });
+      })
+        .then(() => {
+          setSuccessMessage(
+            "Registration successful. Please check your email to verify your account."
+          );
+        })
+        .catch((error) => {
+          console.error("Registration failed", error);
+        });
     } catch (error) {
       console.error("Registration failed", error);
     }
@@ -78,9 +88,10 @@ const RegisterForm = () => {
         placeholder="Password"
       />
       {passwordError && <div className="error">{passwordError}</div>}
-      <button className="btn-submit"  type="submit">
+      <button className="btn-submit" type="submit">
         Register
       </button>
+      {successMessage && <div className="success">{successMessage}</div>}
     </form>
   );
 };

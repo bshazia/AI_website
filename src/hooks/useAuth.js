@@ -1,3 +1,4 @@
+// src/hooks/useAuth.js
 import { useState, useEffect } from "react";
 import axios from "axios";
 import authService from "../services/authService";
@@ -21,10 +22,10 @@ const useAuth = () => {
     try {
       const csrfToken = await getCsrfToken();
       const response = await authService.login(userData, csrfToken);
-      localStorage.setItem("token", response.token); // Save the token in localStorage
+      localStorage.setItem("token", response.token);
       setUser(response.user);
       setIsAuthenticated(true);
-      navigate("/dashboard"); // Navigate to dashboard after login
+      navigate("/dashboard");
     } catch (error) {
       console.error("Login failed", error);
       setIsAuthenticated(false);
@@ -35,9 +36,25 @@ const useAuth = () => {
     try {
       const csrfToken = await getCsrfToken();
       await authService.register(userData, csrfToken);
-      navigate("/dashboard");
+      navigate("/check-email");
     } catch (error) {
       console.error("Registration failed", error);
+    }
+  };
+
+  const verifyEmail = async (token) => {
+    try {
+      const response = await axios.get(
+        `${API_URL}/api/verify-email?token=${token}`
+      );
+      if (response.status === 200) {
+        navigate("/dashboard");
+      } else {
+        navigate("/error");
+      }
+    } catch (error) {
+      console.error("Email verification failed", error);
+      navigate("/error");
     }
   };
 
@@ -50,14 +67,13 @@ const useAuth = () => {
   };
 
   useEffect(() => {
-    // Check if token is in localStorage
     const token = localStorage.getItem("token");
     if (token) {
       setIsAuthenticated(true);
     }
   }, []);
 
-  return { user, isAuthenticated, login, register, logout };
+  return { user, isAuthenticated, login, register, logout, verifyEmail };
 };
 
 export default useAuth;
