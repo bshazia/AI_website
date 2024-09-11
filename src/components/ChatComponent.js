@@ -1,19 +1,95 @@
+// src/components/ChatComponent.js
 import React, { useState, useEffect, useRef } from "react";
-import "../styles/Chatgpt.css";
-import imgsend from "../images/sent.png";
+import {
+  Box,
+  TextField,
+  Button,
+  styled,
+  Drawer,
+  IconButton,
+} from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import useChat from "../hooks/useChat";
 import DOMPurify from "dompurify";
 import { escapeHtml } from "../utils/securityUtils";
-import ChatSidebar from "./ChatSidebar"; // Import ChatSidebar
+import imgsend from "../images/sent.png";
+import { useNavigate } from "react-router-dom";
+
+const ChatAppContainer = styled(Box)({
+  display: "flex",
+  height: "100vh",
+  backgroundColor: "#1c1c1c",
+});
+
+const SidebarDrawer = styled(Drawer)({
+  width: 240,
+  flexShrink: 0,
+  "& .MuiDrawer-paper": {
+    width: 240,
+    boxSizing: "border-box",
+    backgroundColor: "#1c1c1c",
+    color: "#fff",
+  },
+});
+
+const ChatContainer = styled(Box)({
+  flex: 1,
+  display: "flex",
+  flexDirection: "column",
+  padding: "20px",
+  color: "#fff",
+});
+
+const ChatMessages = styled(Box)({
+  flex: 1,
+  overflowY: "auto",
+  padding: "10px",
+  border: "1px solid #333",
+  borderRadius: "8px",
+  backgroundColor: "#121212",
+});
+
+const ChatInputContainer = styled(Box)({
+  display: "flex",
+  alignItems: "center",
+  padding: "10px",
+});
+
+const ChatInput = styled(TextField)({
+  flex: 1,
+  backgroundColor: "#333",
+  borderRadius: "4px",
+  "& .MuiInputBase-input": {
+    color: "#fff",
+  },
+});
+
+const SendButton = styled(Button)({
+  marginLeft: "10px",
+  color: "#fff",
+  backgroundColor: "#007bff",
+  "&:hover": {
+    backgroundColor: "#0056b3",
+  },
+  "& img": {
+    width: "20px",
+    height: "20px",
+  },
+});
+
+const BackButton = styled(IconButton)({
+  marginBottom: "10px",
+  color: "#fff",
+});
 
 function ChatComponent() {
   const { response, handleSendMessage } = useChat();
   const [messages, setMessages] = useState([]);
   const [userMessage, setUserMessage] = useState("");
-  const [sidebarOpen, setSidebarOpen] = useState(true); // Sidebar state
-  const [summarizedResponse, setSummarizedResponse] = useState(null); 
-
+  const [sidebarOpen, setSidebarOpen] = useState(false); // Toggle sidebar
   const chatMessagesRef = useRef(null);
+  const navigate = useNavigate(); // Initialize navigate
 
   const sendMessage = async () => {
     const sanitizedMessage = sanitizeMessage(userMessage);
@@ -26,7 +102,7 @@ function ChatComponent() {
       setMessages(newMessages);
 
       try {
-        await handleSendMessage(sanitizedMessage); // Pass sanitizedMessage here
+        await handleSendMessage(sanitizedMessage);
       } catch (error) {
         setMessages((prevMessages) => [
           ...prevMessages,
@@ -37,16 +113,14 @@ function ChatComponent() {
         ]);
       }
 
-      setUserMessage(""); // Clear the input field
+      setUserMessage("");
     }
   };
 
   const sanitizeMessage = (message) => {
-    // Escape HTML entities to prevent XSS
     return escapeHtml(DOMPurify.sanitize(message));
   };
 
-  // Update chat messages when response changes
   useEffect(() => {
     if (response) {
       const sanitizedResponse = sanitizeMessage(response);
@@ -54,12 +128,8 @@ function ChatComponent() {
         ...prevMessages,
         { sender: "AI 4.O", message: sanitizedResponse },
       ]);
-      // Update summarizedResponse with the first AI response
-      if (!summarizedResponse) {
-        setSummarizedResponse(sanitizedResponse);
-      }
     }
-  }, [response]); // This will trigger when `response` is updated
+  }, [response]);
 
   const handleKeyPress = (event) => {
     if (event.key === "Enter") {
@@ -73,21 +143,43 @@ function ChatComponent() {
     }
   }, [messages]);
 
-  return (
-    <div className="chat-app">
-      {/* Render Sidebar */}
-      <ChatSidebar
-        sidebarOpen={sidebarOpen}
-        setSidebarOpen={setSidebarOpen}
-        messages={messages}
-      />
+  const handleBack = () => {
+    navigate("/dashboard"); // Navigate to DashboardPage
+  };
 
-      <div className="chat-container">
-        <div className="chat-messages" ref={chatMessagesRef}>
+  return (
+    <ChatAppContainer>
+      {/* Sidebar Drawer */}
+      <SidebarDrawer
+        variant="persistent"
+        anchor="left"
+        open={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+      >
+        <Box p={2}>
+          <h3>Sidebar Content</h3>
+          <p>Useful chat information here</p>
+        </Box>
+      </SidebarDrawer>
+
+      <ChatContainer>
+        {/* Back Button */}
+        <BackButton onClick={handleBack}>
+          <ArrowBackIcon />
+        </BackButton>
+
+        {/* Toggle Sidebar Button */}
+        <IconButton
+          onClick={() => setSidebarOpen(!sidebarOpen)}
+          sx={{ color: "#fff", alignSelf: "flex-start" }}
+        >
+          <MenuIcon />
+        </IconButton>
+
+        <ChatMessages ref={chatMessagesRef}>
           {messages.map((msg, index) => (
-            <div
+            <Box
               key={index}
-              className="chat-message"
               dangerouslySetInnerHTML={{
                 __html: DOMPurify.sanitize(
                   `<strong>${escapeHtml(msg.sender)}:</strong> ${escapeHtml(
@@ -95,24 +187,29 @@ function ChatComponent() {
                   )}`
                 ),
               }}
+              marginBottom={1}
+              padding={1}
+              borderRadius={1}
+              border="1px solid #333"
+              bgcolor="#121212"
             />
           ))}
-        </div>
-        <div className="chat-input-container">
-          <input
+        </ChatMessages>
+
+        <ChatInputContainer>
+          <ChatInput
             type="text"
-            className="chat-input"
             value={userMessage}
             placeholder="Type your message..."
             onChange={(e) => setUserMessage(e.target.value)}
             onKeyPress={handleKeyPress}
           />
-          <button className="send-button" onClick={sendMessage}>
+          <SendButton onClick={sendMessage}>
             <img src={imgsend} alt="Send" />
-          </button>
-        </div>
-      </div>
-    </div>
+          </SendButton>
+        </ChatInputContainer>
+      </ChatContainer>
+    </ChatAppContainer>
   );
 }
 

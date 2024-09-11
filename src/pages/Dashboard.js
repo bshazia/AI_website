@@ -1,82 +1,133 @@
-// src/pages/Dashboard.js
 import React, { useEffect, useContext } from "react";
-import { useNavigate, Link } from "react-router-dom"; // Import Link
-import { Helmet } from "react-helmet"; // Import Helmet for managing meta tags
-import { AuthContext } from "../contexts/AuthContext"; 
-import "../styles/Dashboard.css";
+import { useNavigate, Link } from "react-router-dom";
+import { Helmet } from "react-helmet";
+import { AuthContext } from "../contexts/AuthContext";
+import { Container, Typography, Button, Box, Grid, Paper } from "@mui/material";
+import { styled } from "@mui/system";
 import pic from "../images/001234.png";
+import DOMPurify from "dompurify";
+
+// Styled components for the blackish theme
+const Header = styled("header")({
+  backgroundColor: "#1c1c1c", // Darker header
+  padding: "20px",
+  boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.3)",
+});
+
+const Logo = styled(Typography)({
+  fontWeight: "bold",
+  color: "#fff", // White text for logo
+  marginBottom: "20px",
+});
+
+const NavLink = styled(Link)({
+  textDecoration: "none",
+  color: "#007bff",
+  fontWeight: "500",
+  margin: "0 10px",
+  "&:hover": {
+    textDecoration: "underline",
+  },
+});
+
+const LogoutButton = styled(Button)({
+  backgroundColor: "#ff4d4d",
+  color: "#fff",
+  "&:hover": {
+    backgroundColor: "#e04343",
+  },
+});
+
+const ContentSection = styled(Box)({
+  textAlign: "center",
+  marginTop: "20px",
+  color: "#fff", // Text color in white for dark theme
+});
+
+const Image = styled("img")({
+  maxWidth: "100%",
+  height: "auto",
+  borderRadius: "8px",
+});
+
+const DarkPaper = styled(Paper)({
+  backgroundColor: "#333", // Dark paper background
+  padding: "20px",
+  textAlign: "center",
+});
 
 const Dashboard = () => {
-  const { isAuthenticated, loading, logout } = useContext(AuthContext); // Add logout from AuthContext
+  const { isAuthenticated, loading, logout } = useContext(AuthContext);
   const navigate = useNavigate();
-  const isLoggedIn = isAuthenticated; // Define isLoggedIn using isAuthenticated
+  const isLoggedIn = isAuthenticated;
 
-
-  const sanitizedContent = "<p></p>"; 
+  // Sanitize dynamic HTML content
+  const sanitizedContent = DOMPurify.sanitize(
+    "<p>Welcome to your AI dashboard! Explore the tools and features available to you.</p>"
+  );
 
   const handleLogout = () => {
-    logout(); // Call the logout function
-    navigate("/"); // Redirect to home after logout
+    logout();
+    navigate("/");
   };
 
   useEffect(() => {
     if (!loading && !isAuthenticated) {
-      navigate("/"); // Redirect to home page if not authenticated
+      navigate("/");
     }
   }, [isAuthenticated, loading, navigate]);
 
   if (loading) {
-    return <div>Loading...</div>; // Show loading indicator while checking auth status
+    return <div>Loading...</div>;
   }
 
   return (
     <>
-      {/* Add Helmet to manage meta tags and other head elements */}
       <Helmet>
         <title>AI Tools for All</title>
+        {/* Apply security headers */}
+        <meta
+          httpEquiv="Content-Security-Policy"
+          content="default-src 'self'; script-src 'self';"
+        />
       </Helmet>
 
-      <div className="dashboard-page">
-        <header>
-          <div className="dash-container">
-            <b>AI For Gen Z</b>
+      <Header>
+        <Container>
+          <Logo variant="h4">AI For Gen Z</Logo>
+          <Box display="flex" justifyContent="center" alignItems="center">
+            <NavLink to="/imageservice">Image Tools</NavLink>
+            <NavLink to="/chatgpt">Freedom AI</NavLink>
+            <NavLink to="/article">Writing Tools</NavLink>
+            <NavLink to="/video">Video Tools</NavLink>
+            {isLoggedIn && (
+              <LogoutButton onClick={handleLogout} variant="contained">
+                Logout
+              </LogoutButton>
+            )}
+          </Box>
+        </Container>
+      </Header>
 
-            <ul className="dashboard-page__header links">
-              <li>
-                <Link to="/imageservice">Image Tools</Link>
-              </li>
-              <li>
-                <Link to="/chatgpt">Freedom AI</Link>
-              </li>
-              <li>
-                <Link to="/article">Writing Tools</Link>
-              </li>
-              <li>
-                <Link to="/video">Video Tools</Link>
-              </li>
+      <Container>
+        <ContentSection>
+          <Typography variant="h4" component="h1" gutterBottom>
+            Looking For Inspiration
+          </Typography>
+          {/* Render sanitized HTML content */}
+          <div dangerouslySetInnerHTML={{ __html: sanitizedContent }} />
+        </ContentSection>
 
-              {isLoggedIn && (
-                <li>
-                  <button onClick={handleLogout} className="logout-button">
-                    Logout
-                  </button>
-                </li>
-              )}
-            </ul>
-          </div>
-        </header>
-        <div className="content">
-          <div className="container">
-            <div className="info">
-              <h1>Looking For Inspiration</h1>
-              <div dangerouslySetInnerHTML={{ __html: sanitizedContent }} />
-            </div>
-            <div className="image">
-              <img src={pic} alt="Inspiration" />
-            </div>
-          </div>
-        </div>
-      </div>
+        <Box mt={4}>
+          <Grid container justifyContent="center">
+            <Grid item xs={12} md={8}>
+              <DarkPaper elevation={3}>
+                <Image src={pic} alt="Inspiration" />
+              </DarkPaper>
+            </Grid>
+          </Grid>
+        </Box>
+      </Container>
     </>
   );
 };

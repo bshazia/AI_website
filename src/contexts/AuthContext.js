@@ -47,21 +47,26 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const verifyEmail = async (token) => {
-    try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/api/verify-email?token=${token}`
-      );
-      if (response.status === 200) {
-        navigate("/dashboard"); // Redirect to dashboard on success
-      } else {
-        navigate("/error"); // Redirect to an error page
-      }
-    } catch (error) {
-      console.error("Email verification failed", error);
-      navigate("/error");
+const verifyEmail = async (token) => {
+  console.log("Verifying email with token:", token); // Debug: Log the token
+  try {
+    const response = await axios.get(
+      `${process.env.REACT_APP_API_URL}/api/verify-email?token=${token}`
+    );
+    console.log("API Response:", response); // Debug: Log API response
+    if (response.status === 200) {
+      console.log("Email verification successful"); // Debug: Success log
+      navigate("/dashboard"); // Redirect to dashboard on success
+    } else {
+      console.warn("Unexpected response status:", response.status); // Debug: Unexpected status
+      navigate("/error"); // Redirect to an error page
     }
-  };
+  } catch (error) {
+    console.error("Email verification failed:", error); // Debug: Log error
+    navigate("/error");
+  }
+};
+
 
   const logout = () => {
     authService.logout();

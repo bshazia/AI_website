@@ -1,33 +1,40 @@
+// src/components/ChatSidebar.js
 import React from "react";
-import "../styles/Chatgpt.css";
-import { useNavigate } from "react-router-dom";
+import { Box, Typography, Button, styled } from "@mui/material";
 
-function ChatSidebar({ sidebarOpen, setSidebarOpen, summarizedResponse }) {
-  const navigate = useNavigate();
+const SidebarContainer = styled(Box)({
+  width: "250px",
+  height: "100vh",
+  backgroundColor: "#333",
+  color: "#fff",
+  padding: "20px",
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "space-between",
+});
 
-  const handleBack = () => {
-    navigate("/dashboard"); // Navigate back to dashboard
-  };
+const CloseButton = styled(Button)({
+  color: "#fff",
+  backgroundColor: "#007bff",
+  "&:hover": {
+    backgroundColor: "#0056b3",
+  },
+});
 
+function ChatSidebar({ setSidebarOpen }) {
   return (
-    <div className={`sidebar ${sidebarOpen ? "open" : ""}`}>
-
-      {/* Back Button to navigate to the dashboard */}
-      <button className="back-button" onClick={handleBack}>
-        Back to Dashboard
-      </button>
-
-      <div className="chat-history">
-        <h3>Chat History</h3>
-        <ul>
-          {summarizedResponse && (
-            <li>
-              <strong>AI 4.O:</strong> {summarizedResponse}
-            </li>
-          )}
-        </ul>
-      </div>
-    </div>
+    <SidebarContainer>
+      <Box>
+        <Typography variant="h6">Chat Summary</Typography>
+        <Typography variant="body2" style={{ marginTop: "10px" }}>
+          Your summarized response will go here. It can be based on recent chat
+          activity.
+        </Typography>
+      </Box>
+      <CloseButton onClick={() => setSidebarOpen(false)}>
+        Close Sidebar
+      </CloseButton>
+    </SidebarContainer>
   );
 }
 

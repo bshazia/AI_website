@@ -229,23 +229,26 @@ const resetPassword = async (req, res) => {
 
 const verifyEmail = async (req, res) => {
   const { token } = req.query;
+  console.log("Received token:", token);
 
   try {
     const user = await User.findByVerificationToken(token);
+    console.log("User found:", user);
 
     if (!user) {
       return res.status(400).json({ error: "Invalid or expired token" });
     }
 
-    // Call the new method to verify the user's email
     await User.verifyUserEmail(user.id);
+    console.log("User email verified successfully");
 
     res.status(200).json({ message: "Email verified successfully" });
   } catch (error) {
-    console.error(error);
+    console.error("Error verifying email:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
 
 
 module.exports = {
