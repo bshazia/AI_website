@@ -11,6 +11,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import ForgotPassword from "./pages/ForgotPassword";
 import CheckEmail from "./pages/CheckEmail";
 import VerifyEmailPage from "./pages/Emailverifypage";
+import ResetPasswordPage from "./pages/ResetPasswordPage";
 
 const App = () => {
   return (
@@ -35,6 +36,7 @@ const App = () => {
           {/* Add routes for CheckEmail and VerifyEmailPage */}
           <Route path="/check-email" element={<CheckEmail />} />
           <Route path="/verify-email" element={<VerifyEmailPage />} />
+          <Route path="/reset-password" element={<ResetPasswordPage />} />
         </Routes>
       </AuthProvider>
     </Router>

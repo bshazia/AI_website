@@ -62,12 +62,35 @@ const forgotPassword = async (email, csrfToken) => {
     );
   }
 };
+// Reset password
+const resetPassword = async (token, newPassword) => {
+  try {
+    const response = await axios.post(
+      `${process.env.REACT_APP_API_URL}/api/reset-password`,
+      { token, newPassword },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true, // Ensure cookies are sent with the request
+      }
+    );
+    return response.data;
+  } catch (error) {
+    throw new Error(
+      error.response?.data?.message ||
+        "An error occurred while resetting your password."
+    );
+  }
+};
+
 
 const authService = {
   register,
   login,
   logout,
   forgotPassword,
+  resetPassword,
 };
 
 export default authService;
