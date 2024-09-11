@@ -43,6 +43,7 @@ export const AuthProvider = ({ children }) => {
       navigate("/check-email"); // Navigate to a page informing user to check email
     } catch (error) {
       console.error("Registration failed", error);
+      throw error; // Ensure errors are propagated
     }
   };
 

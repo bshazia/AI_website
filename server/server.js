@@ -47,10 +47,10 @@ app.get("/api/get-csrf-token", (req, res) => {
 
 // Serve static files from the React build folder in production only
 if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "../AIapp/build")));
+  app.use(express.static(path.join(__dirname, ".././build")));
 
   app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "../AIapp/build", "index.html"));
+    res.sendFile(path.join(__dirname, ".././build", "index.html"));
   });
 }
 
@@ -77,6 +77,6 @@ if (process.env.NODE_ENV === "production") {
 
 // Start the server
 const logger = require("./config/logger");
-app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
+app.listen(() => {
+  console.log(`Server running`);
 });

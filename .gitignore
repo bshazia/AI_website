@@ -46,6 +46,7 @@ yarn-error.log*
 # Coverage directory used by testing frameworks
 /coverage
 /server.zip
+/build.zip
 
 # PM2 logs (if you are using PM2)
 /pm2.log

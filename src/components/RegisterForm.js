@@ -1,9 +1,9 @@
+// src/components/RegisterForm.js
 import { useState, useContext } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 import DOMPurify from "dompurify";
-import { escapeHtml } from "../utils/securityUtils"; 
+import { escapeHtml } from "../utils/securityUtils";
 import "../styles/form.css";
-
 
 const RegisterForm = () => {
   const { register } = useContext(AuthContext);
@@ -15,18 +15,18 @@ const RegisterForm = () => {
   const [passwordError, setPasswordError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
-
   const validateEmail = (email) => {
     // Basic email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setNameError("");
     setEmailError("");
     setPasswordError("");
+    setSuccessMessage(""); // Clear success message
 
     // Validate inputs
     if (name.trim() === "") {
@@ -43,21 +43,17 @@ const RegisterForm = () => {
     }
 
     try {
-      register({
+      await register({
         name: sanitizeInput(name),
         email: sanitizeInput(email),
         password: sanitizeInput(password),
-      })
-        .then(() => {
-          setSuccessMessage(
-            "Registration successful. Please check your email to verify your account."
-          );
-        })
-        .catch((error) => {
-          console.error("Registration failed", error);
-        });
+      });
+      setSuccessMessage(
+        "Registration successful. Please check your email to verify your account."
+      );
     } catch (error) {
       console.error("Registration failed", error);
+      // Optionally, set error messages here
     }
   };
 

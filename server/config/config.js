@@ -6,7 +6,7 @@ const config = {
   port: process.env.PORT,
   apiUrl:
     process.env.NODE_ENV === "production"
-      ? process.env.PROD_REACT_APP_API_URL
+      ? process.env.REACT_APP_API_URL
       : process.env.REACT_APP_API_URL,
   db: {
     host: process.env.DB_HOST,

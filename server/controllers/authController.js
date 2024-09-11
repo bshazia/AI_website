@@ -2,9 +2,14 @@ const User = require("../models/user");
 const jwt = require("jsonwebtoken");
 const config = require("../config/config");
 const redis = require("redis");
-const { sendVerificationEmail } = require("../utils/emailService"); // Import the email utility
+const { sendVerificationEmail , sendResetPasswordEmail} = require("../utils/emailService"); // Import the email utility
 const crypto = require("crypto");
 const nodemailer = require("nodemailer");
+const util = require("util");
+const logger = require('../config/logger');
+const validator = require('validator');
+
+
 
 
 
@@ -42,44 +47,56 @@ const register = async (req, res) => {
     // Check if user already exists
     const existingUser = await User.findByEmail(email);
     if (existingUser) {
+        logger.info(`User email: ${email}`);
+        logger.info(`Request body: ${JSON.stringify(req.body)}`);
+
+
       return res.status(400).json({ error: "Email already in use" });
     }
 
+    logger.info(`new user with unverified email: ${ name}, ${email}, ${password}`);
+
     // Create new user with unverified email
-    const newUser = await User.create({
+    const result = await User.create({
       name,
       email,
       password,
       email_verified: false, // Mark email as unverified
     });
 
+        logger.info(`Generate a email_verified : ${email}`);
+
     // Generate a verification token
     const { token, expiry } = generateVerificationToken();
 
     // Log the generated token and verification URL
-    console.log("Generated Token:", token);
-    const verificationUrl = `http://localhost:5000/verify-email?token=${token}`;
-    console.log("Verification URL:", verificationUrl);
+    logger.info(`Generated Token: ${token}`);
+     logger.info(`expiry  Token: ${ expiry}`);
+     
+    // const verificationUrl = `https://aitool4all.com/verify-email?token=${token}`;
+    // logger.info(`Verification URL: ${ verificationUrl}`);
 
     // Save the token and expiry to the user's record
-    newUser.verification_token = token;
-    newUser.verification_token_expiry = expiry;
-    await newUser.save();
+    logger.info(`updateVerificationToken: ${email}`);
+    await User.updateVerificationToken(email, token, expiry);
+    
+    logger.info(`Sending email to: ${email}`);
+
 
     // Send verification email
-    await sendVerificationEmail(newUser.email, verificationUrl);
-
+    await sendVerificationEmail(email, token);
+ logger.info(`Send verification email to: ${email}`);
     // Respond to client
     res.status(201).json({
       message:
-        "User registered successfully. Please check your email to verify your account.",
-      token: token, // Optionally include the token in the response
+        "User registered successfully. Please check your email to verify your account."
     });
   } catch (error) {
-    console.error(error);
+    console.error("email verification error:",error);
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
 
 const login = async (req, res) => {
   const { email, password } = req.body;
@@ -158,11 +175,14 @@ const isTokenBlacklisted = async (token) => {
 };
 
 
-
 const forgotPassword = async (req, res) => {
   const { email } = req.body;
 
   try {
+    if (!validator.isEmail(email)) {
+      return res.status(400).json({ error: "Invalid email format" });
+    }
+
     const user = await User.findByEmail(email);
     if (!user) {
       return res.status(404).json({ error: "User not found" });
@@ -170,32 +190,23 @@ const forgotPassword = async (req, res) => {
 
     // Generate a reset token
     const token = crypto.randomBytes(32).toString("hex");
-
-    await User.updateResetToken(email, token);
+    
+    // Set expiry date to 10 minutes from now
+    const expiryDate = new Date();
+    
+    // Call updateResetToken with a valid Date object
+    await User.updateResetToken(email, token, expiryDate);
 
     // Send the reset token to the user's email
-    const transporter = nodemailer.createTransport({
-      service: "Gmail",
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-      },
-    });
-
-    const resetUrl = `${process.env.FRONTEND_URL}/reset-password?token=${token}`;
-
-    await transporter.sendMail({
-      to: email,
-      subject: "Password Reset Request",
-      text: `Click the link to reset your password: ${resetUrl}`,
-    });
+    await sendResetPasswordEmail(email, token);
 
     res.status(200).json({ message: "Reset link sent to your email" });
   } catch (error) {
-    console.error(error);
+    console.error("Error sending email:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
 
 const resetPassword = async (req, res) => {
   const { token, newPassword } = req.body;
@@ -215,25 +226,19 @@ const resetPassword = async (req, res) => {
   }
 };
 
+
 const verifyEmail = async (req, res) => {
-  const { token } = req.query; // Get the token from the URL
+  const { token } = req.query;
 
   try {
-    const user = await User.findOne({
-      where: {
-        verification_token: token,
-        verification_token_expiry: { $gt: new Date() }, // Ensure token is still valid
-      },
-    });
+    const user = await User.findByVerificationToken(token);
 
     if (!user) {
       return res.status(400).json({ error: "Invalid or expired token" });
     }
 
-    user.email_verified = true;
-    user.verification_token = null;
-    user.verification_token_expiry = null;
-    await user.save();
+    // Call the new method to verify the user's email
+    await User.verifyUserEmail(user.id);
 
     res.status(200).json({ message: "Email verified successfully" });
   } catch (error) {
@@ -241,6 +246,7 @@ const verifyEmail = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
 
 module.exports = {
   register,
