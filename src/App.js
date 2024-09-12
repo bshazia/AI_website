@@ -36,11 +36,11 @@ const App = () => {
             element={<ProtectedRoute element={Imageservice} />}
           />
           <Route path="/forgot-password" element={<ForgotPassword />} />
-          {/* Add routes for CheckEmail and VerifyEmailPage */}
           <Route path="/check-email" element={<CheckEmail />} />
           <Route path="/verify-email" element={<VerifyEmailPage />} />
           <Route path="/reset-password" element={<ResetPasswordPage />} />
           <Route path="/error" element={<ErrorPage />} />
+          {/* <Route path="/chatgpt" element={<ChatComponent />} /> */}
         </Routes>
       </AuthProvider>
     </Router>

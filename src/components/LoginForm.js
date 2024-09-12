@@ -2,7 +2,7 @@ import React from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "react-router-dom"; // Import Link here
 import { AuthContext } from "../contexts/AuthContext";
 import DOMPurify from "dompurify";
 import { escapeHtml } from "../utils/securityUtils";
@@ -24,22 +24,16 @@ const LoginForm = () => {
       password: "",
     },
     validationSchema,
-    onSubmit: async (values, { setStatus, setSubmitting }) => {
+    onSubmit: async (values) => {
       try {
         await login({
           email: sanitizeInput(values.email),
           password: sanitizeInput(values.password),
         });
-        setStatus(null); // Clear any previous status messages
       } catch (error) {
         console.error("Login failed", error);
-        if (error.response && error.response.status === 401) {
-          setStatus("Invalid credentials. Please try again.");
-        } else {
-          setStatus("An unexpected error occurred. Please try again.");
-        }
+        // You might want to show an error message to the user here
       }
-      setSubmitting(false);
     },
   });
 
@@ -76,16 +70,12 @@ const LoginForm = () => {
             <div className="error">{formik.errors.password}</div>
           ) : null}
         </div>
-        <button
-          className="btn-submit"
-          type="submit"
-          disabled={formik.isSubmitting}
-        >
-          {formik.isSubmitting ? "Logging in..." : "Login"}
+        <button className="btn-submit" type="submit">
+          Login
         </button>
-        {formik.status && <div className="error">{formik.status}</div>}
       </form>
-      <Link to="/forgot-password">Forgot your password?</Link>
+      <Link to="/forgot-password">Forgot your password?</Link>{" "}
+      {/* Link to forgot password page */}
     </div>
   );
 };

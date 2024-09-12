@@ -1,4 +1,3 @@
-// src/components/ChatComponent.js
 import React, { useState, useEffect, useRef } from "react";
 import {
   Box,
@@ -10,11 +9,18 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import VolumeUpIcon from "@mui/icons-material/VolumeUp";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import ThumbUpIcon from "@mui/icons-material/ThumbUp";
+import ThumbDownIcon from "@mui/icons-material/ThumbDown";
+import RefreshIcon from "@mui/icons-material/Refresh";
 import useChat from "../hooks/useChat";
 import DOMPurify from "dompurify";
 import { escapeHtml } from "../utils/securityUtils";
 import imgsend from "../images/sent.png";
 import { useNavigate } from "react-router-dom";
+import he from "he"; // HTML entities decoding library
+import { CopyToClipboard } from "react-copy-to-clipboard";
 
 const ChatAppContainer = styled(Box)({
   display: "flex",
@@ -48,6 +54,44 @@ const ChatMessages = styled(Box)({
   border: "1px solid #333",
   borderRadius: "8px",
   backgroundColor: "#121212",
+  display: "flex",
+  flexDirection: "column",
+});
+
+const ChatMessage = styled(Box)(({ isUser }) => ({
+  alignSelf: isUser ? "flex-end" : "flex-start",
+  backgroundColor: isUser ? "#007bff" : "#333",
+  color: isUser ? "#fff" : "#ddd",
+  padding: "10px",
+  borderRadius: "10px",
+  margin: "5px 0",
+  maxWidth: "70%",
+  wordBreak: "break-word",
+  display: "flex",
+  flexDirection: "column",
+}));
+
+const CodeBlock = styled(Box)({
+  backgroundColor: "#333",
+  borderRadius: "5px",
+  padding: "10px",
+  whiteSpace: "pre-wrap",
+  fontFamily: "monospace",
+});
+
+const MessageActions = styled(Box)({
+  marginTop: "10px",
+  display: "flex",
+  justifyContent: "flex-end",
+  gap: "10px",
+  color: "#fff",
+});
+
+const ActionButton = styled(IconButton)({
+  color: "#fff",
+  "&:hover": {
+    color: "#007bff",
+  },
 });
 
 const ChatInputContainer = styled(Box)({
@@ -91,39 +135,75 @@ function ChatComponent() {
   const chatMessagesRef = useRef(null);
   const navigate = useNavigate(); // Initialize navigate
 
-  const sendMessage = async () => {
-    const sanitizedMessage = sanitizeMessage(userMessage);
+  // Store the original message for each AI response
+  const [originalMessages, setOriginalMessages] = useState({});
 
-    if (sanitizedMessage.trim() !== "") {
-      const newMessages = [
-        ...messages,
-        { sender: "You", message: sanitizedMessage },
-      ];
-      setMessages(newMessages);
+const sendMessage = async () => {
+  const sanitizedMessage = sanitizeMessage(userMessage);
 
+  if (sanitizedMessage.trim() !== "") {
+    const newMessages = [
+      ...messages,
+      { sender: "You", message: sanitizedMessage },
+    ];
+    setMessages(newMessages);
+
+    // Clear the input field immediately
+    setUserMessage("");
+
+    // Store the original message for regeneration
+    const messageId = newMessages.length - 1;
+    setOriginalMessages((prev) => ({
+      ...prev,
+      [messageId]: sanitizedMessage,
+    }));
+
+    try {
+      await handleSendMessage(sanitizedMessage);
+    } catch (error) {
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        {
+          sender: "AI 4.O",
+          message: "An error occurred. Please try again later.",
+        },
+      ]);
+    }
+  }
+};
+
+  const regenerateResponse = async (messageId) => {
+    const originalMessage = originalMessages[messageId];
+
+    if (originalMessage) {
       try {
-        await handleSendMessage(sanitizedMessage);
+        // Request a new response from the AI for the original message
+        await handleSendMessage(originalMessage);
       } catch (error) {
         setMessages((prevMessages) => [
           ...prevMessages,
           {
             sender: "AI 4.O",
-            message: "An error occurred. Please try again later.",
+            message:
+              "An error occurred while regenerating. Please try again later.",
           },
         ]);
       }
-
-      setUserMessage("");
     }
   };
 
   const sanitizeMessage = (message) => {
-    return escapeHtml(DOMPurify.sanitize(message));
+    return DOMPurify.sanitize(message);
+  };
+
+  const decodeHtmlEntities = (html) => {
+    return he.decode(html);
   };
 
   useEffect(() => {
     if (response) {
-      const sanitizedResponse = sanitizeMessage(response);
+      const decodedResponse = decodeHtmlEntities(response);
+      const sanitizedResponse = sanitizeMessage(decodedResponse);
       setMessages((prevMessages) => [
         ...prevMessages,
         { sender: "AI 4.O", message: sanitizedResponse },
@@ -145,6 +225,31 @@ function ChatComponent() {
 
   const handleBack = () => {
     navigate("/dashboard"); // Navigate to DashboardPage
+  };
+
+  const handleTextToSpeech = (text) => {
+    // Stop any ongoing speech synthesis
+    if (window.speechSynthesis.speaking) {
+      window.speechSynthesis.cancel();
+    }
+
+    // Create a new SpeechSynthesisUtterance and speak it
+    const utterance = new SpeechSynthesisUtterance(text);
+    window.speechSynthesis.speak(utterance);
+  };
+
+  const handleCopy = (text) => {
+    // Copy to clipboard
+    navigator.clipboard.writeText(text);
+  };
+
+  const handleFeedback = (type, message) => {
+    // Handle feedback (e.g., log it or send it to a server)
+    console.log(`${type} feedback for message:`, message);
+  };
+
+  const isCodeBlock = (message) => {
+    return message.startsWith("```") && message.endsWith("```");
   };
 
   return (
@@ -178,21 +283,46 @@ function ChatComponent() {
 
         <ChatMessages ref={chatMessagesRef}>
           {messages.map((msg, index) => (
-            <Box
-              key={index}
-              dangerouslySetInnerHTML={{
-                __html: DOMPurify.sanitize(
-                  `<strong>${escapeHtml(msg.sender)}:</strong> ${escapeHtml(
-                    msg.message
-                  )}`
-                ),
-              }}
-              marginBottom={1}
-              padding={1}
-              borderRadius={1}
-              border="1px solid #333"
-              bgcolor="#121212"
-            />
+            <ChatMessage key={index} isUser={msg.sender === "You"}>
+              {isCodeBlock(msg.message) ? (
+                <CodeBlock
+                  dangerouslySetInnerHTML={{
+                    __html: DOMPurify.sanitize(escapeHtml(msg.message)),
+                  }}
+                />
+              ) : (
+                <Box
+                  dangerouslySetInnerHTML={{
+                    __html: DOMPurify.sanitize(escapeHtml(msg.message)),
+                  }}
+                />
+              )}
+              {msg.sender === "AI 4.O" && (
+                <MessageActions>
+                  <ActionButton onClick={() => handleTextToSpeech(msg.message)}>
+                    <VolumeUpIcon />
+                  </ActionButton>
+                  <CopyToClipboard text={msg.message}>
+                    <ActionButton>
+                      <ContentCopyIcon />
+                    </ActionButton>
+                  </CopyToClipboard>
+                  <ActionButton
+                    onClick={() => handleFeedback("good", msg.message)}
+                  >
+                    <ThumbUpIcon />
+                  </ActionButton>
+                  <ActionButton
+                    onClick={() => handleFeedback("bad", msg.message)}
+                  >
+                    <ThumbDownIcon />
+                  </ActionButton>
+                  <ActionButton onClick={() => regenerateResponse(index)}>
+                    <RefreshIcon />
+                  </ActionButton>
+                </MessageActions>
+              )}
+            </ChatMessage>
           ))}
         </ChatMessages>
 

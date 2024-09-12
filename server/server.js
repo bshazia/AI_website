@@ -12,7 +12,7 @@ const config = require("./config/config"); // Updated path to config file
 // CORS configuration
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL || "http://localhost:3000",
+    origin: ["http://localhost:3000", "https://aitool4all.com"],
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     credentials: true, // Allow credentials (like cookies, authorization headers)
   })
@@ -79,4 +79,12 @@ if (process.env.NODE_ENV === "production") {
 const logger = require("./config/logger");
 app.listen(() => {
   console.log(`Server running`);
+});
+
+const PORT = process.env.PORT || 5000; // Ensure this matches the port you're trying to access
+
+// Your middleware and routes here
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });

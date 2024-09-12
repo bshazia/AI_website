@@ -1,3 +1,4 @@
+// src/contexts/AuthContext.js
 import React, { createContext, useState, useEffect } from "react";
 import axios from "axios";
 import authService from "../services/authService";
@@ -9,36 +10,16 @@ export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true); // Add loading state
 
   const getCsrfToken = async () => {
     const response = await axios.get(
       `${process.env.REACT_APP_API_URL}/api/get-csrf-token`,
-      { withCredentials: true }
+      {
+        withCredentials: true,
+      }
     );
     return response.data.csrfToken;
-  };
-
-  // Improved error handling utility
-  const handleAxiosError = (error) => {
-    if (error.response) {
-      // Server responded with a status other than 2xx
-      if (error.response.status === 400) {
-        return error.response.data.error || "Bad Request";
-      } else if (error.response.status === 401) {
-        return "Unauthorized. Please log in.";
-      } else if (error.response.status === 409) {
-        return "Email already in use.";
-      } else if (error.response.status >= 500) {
-        return "Server error. Please try again later.";
-      }
-    } else if (error.request) {
-      // No response was received
-      return "Network error. Please check your internet connection.";
-    } else {
-      // Something happened in setting up the request
-      return "Error: " + error.message;
-    }
   };
 
   const login = async (userData) => {
@@ -50,9 +31,8 @@ export const AuthProvider = ({ children }) => {
       setIsAuthenticated(true);
       navigate("/dashboard");
     } catch (error) {
-      const errorMessage = handleAxiosError(error);
-      console.error("Login failed:", errorMessage);
-      return errorMessage; // Return error to be displayed in the UI
+      console.error("Login failed", error);
+      setIsAuthenticated(false);
     }
   };
 
@@ -62,30 +42,33 @@ export const AuthProvider = ({ children }) => {
       await authService.register(userData, csrfToken);
       navigate("/check-email"); // Navigate to a page informing user to check email
     } catch (error) {
-      const errorMessage = handleAxiosError(error);
-      console.error("Registration failed:", errorMessage);
-      throw new Error(errorMessage); // Propagate error to UI
+      console.error("Registration failed", error);
+      throw error; // Ensure errors are propagated
     }
   };
 
-  const verifyEmail = async (token) => {
-    console.log("Verifying email with token:", token);
-    try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/api/verify-email?token=${token}`
-      );
-      if (response.status === 200) {
-        navigate("/dashboard");
-      } else {
-        console.warn("Unexpected response status:", response.status);
-        navigate("/error");
-      }
-    } catch (error) {
-      const errorMessage = handleAxiosError(error);
-      console.error("Email verification failed:", errorMessage);
-      navigate("/error");
+const verifyEmail = async (token) => {
+  console.log("Verifying email with token:", token); // Debug: Log the token
+  try {
+    const response = await axios.get(
+      `${process.env.REACT_APP_API_URL}/api/verify-email?token=${token}`
+    );
+    console.log("API Response:", response); // Debug: Log API response
+    if (response.status === 200) {
+      console.log("Email verification successful"); 
+      console.log("Redirecting to dashboard "); 
+      navigate("/dashboard"); // Redirect to dashboard on success
+      console.log("woo hoo Redirected to dashboard "); 
+    } else {
+      console.warn("Unexpected response status:", response.status); // Debug: Unexpected status
+      navigate("/error"); // Redirect to an error page
     }
-  };
+  } catch (error) {
+    console.error("Email verification failed:", error); // Debug: Log error
+    navigate("/error");
+  }
+};
+
 
   const logout = () => {
     authService.logout();
