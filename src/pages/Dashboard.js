@@ -98,8 +98,8 @@ const Dashboard = () => {
           <Box display="flex" justifyContent="center" alignItems="center">
             <NavLink to="/imageservice">Image Tools</NavLink>
             <NavLink to="/chatgpt">Freedom AI</NavLink>
-            <NavLink to="/article">Writing Tools</NavLink>
-            <NavLink to="/video">Video Tools</NavLink>
+            {/* <NavLink to="/article">Writing Tools</NavLink>
+            <NavLink to="/video">Video Tools</NavLink> */}
             {isLoggedIn && (
               <LogoutButton onClick={handleLogout} variant="contained">
                 Logout

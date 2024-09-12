@@ -29,7 +29,7 @@ export const sendMessageToChatGPT = async (message, csrfToken) => {
     );
     return response.data.message;
   } catch (error) {
-    console.error("Error sending message to ChatGPT:", error);
-    throw new Error("Failed to send message to ChatGPT");
+    console.error("Error sending message to AI:", error);
+    throw new Error("Failed to send message to AI");
   }
 };

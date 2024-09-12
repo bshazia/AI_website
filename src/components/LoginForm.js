@@ -1,48 +1,47 @@
-import { useState, useContext } from "react";
+import React from "react";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { useContext } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthContext";
 import DOMPurify from "dompurify";
-import { escapeHtml } from "../utils/securityUtils"; 
+import { escapeHtml } from "../utils/securityUtils";
 import "../styles/form.css";
 
+// Validation schema using Yup
+const validationSchema = Yup.object({
+  email: Yup.string()
+    .email("Invalid email address")
+    .required("Email is required"),
+  password: Yup.string().required("Password is required"),
+});
 
 const LoginForm = () => {
   const { login } = useContext(AuthContext);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [emailError, setEmailError] = useState("");
-  const [passwordError, setPasswordError] = useState("");
-
-  const validateEmail = (email) => {
-    // Basic email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setEmailError("");
-    setPasswordError("");
-
-    // Validate inputs
-    if (!validateEmail(email)) {
-      setEmailError("Invalid email address.");
-      return;
-    }
-    if (password.trim() === "") {
-      setPasswordError("Password is required.");
-      return;
-    }
-
-    try {
-      await login({
-        email: sanitizeInput(email),
-        password: sanitizeInput(password),
-      });
-    } catch (error) {
-      console.error("Login failed", error);
-    }
-  };
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    validationSchema,
+    onSubmit: async (values, { setStatus, setSubmitting }) => {
+      try {
+        await login({
+          email: sanitizeInput(values.email),
+          password: sanitizeInput(values.password),
+        });
+        setStatus(null); // Clear any previous status messages
+      } catch (error) {
+        console.error("Login failed", error);
+        if (error.response && error.response.status === 401) {
+          setStatus("Invalid credentials. Please try again.");
+        } else {
+          setStatus("An unexpected error occurred. Please try again.");
+        }
+      }
+      setSubmitting(false);
+    },
+  });
 
   const sanitizeInput = (input) => {
     return DOMPurify.sanitize(escapeHtml(input));
@@ -50,27 +49,43 @@ const LoginForm = () => {
 
   return (
     <div>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="Email"
-        />
-        {emailError && <div className="error">{emailError}</div>}
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Password"
-        />
-        {passwordError && <div className="error">{passwordError}</div>}
-        <button className="btn-submit" type="submit">
-          Login
+      <form onSubmit={formik.handleSubmit}>
+        <div>
+          <input
+            type="email"
+            name="email"
+            value={formik.values.email}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            placeholder="Email"
+          />
+          {formik.touched.email && formik.errors.email ? (
+            <div className="error">{formik.errors.email}</div>
+          ) : null}
+        </div>
+        <div>
+          <input
+            type="password"
+            name="password"
+            value={formik.values.password}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            placeholder="Password"
+          />
+          {formik.touched.password && formik.errors.password ? (
+            <div className="error">{formik.errors.password}</div>
+          ) : null}
+        </div>
+        <button
+          className="btn-submit"
+          type="submit"
+          disabled={formik.isSubmitting}
+        >
+          {formik.isSubmitting ? "Logging in..." : "Login"}
         </button>
+        {formik.status && <div className="error">{formik.status}</div>}
       </form>
-      <Link to="/forgot-password">Forgot your password?</Link>{" "}
-      {/* Link to forgot password page */}
+      <Link to="/forgot-password">Forgot your password?</Link>
     </div>
   );
 };

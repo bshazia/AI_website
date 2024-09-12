@@ -1,5 +1,5 @@
 import React from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import {
   Box,
   Typography,
@@ -10,9 +10,9 @@ import {
 } from "@mui/material";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as yup from "yup";
-import authService from "../services/authService"; // Import the default export
+import authService from "../services/authService";
 
-const { resetPassword } = authService; // Destructure the resetPassword function
+const { resetPassword } = authService;
 
 const Container = styled(Box)({
   display: "flex",
@@ -23,6 +23,24 @@ const Container = styled(Box)({
   backgroundColor: "#1c1c1c",
   color: "#fff",
   textAlign: "center",
+});
+
+const StyledTextField = styled(TextField)({
+  marginBottom: "16px",
+  "& .MuiInputLabel-root": {
+    color: "#fff",
+  },
+  "& .MuiOutlinedInput-root": {
+    "& fieldset": {
+      borderColor: "#fff",
+    },
+    "&:hover fieldset": {
+      borderColor: "#fff",
+    },
+    "&.Mui-focused fieldset": {
+      borderColor: "#fff",
+    },
+  },
 });
 
 const validationSchema = yup.object({
@@ -42,20 +60,22 @@ const ResetPasswordPage = () => {
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token");
   const [loading, setLoading] = React.useState(false);
+  const navigate = useNavigate();
 
   const handlePasswordReset = async (values) => {
     setLoading(true);
     try {
       const response = await resetPassword(token, values.newPassword);
       if (response.message === "Password reset successfully") {
-        alert("Password reset successfully");
-        // Redirect to login or another page if needed
+        navigate("/login"); // Redirect to login page after success
       } else {
-        alert("Failed to reset password");
+        alert("Failed to reset password. Please try again.");
       }
     } catch (error) {
       console.error("Error resetting password:", error);
-      alert("An error occurred while resetting your password");
+      alert(
+        "An error occurred while resetting your password. Please try again."
+      );
     } finally {
       setLoading(false);
     }
@@ -65,6 +85,13 @@ const ResetPasswordPage = () => {
     return (
       <Container>
         <Typography variant="h6">Invalid or expired token.</Typography>
+        <Button
+          variant="outlined"
+          onClick={() => navigate("/")}
+          style={{ marginTop: "20px", color: "#fff", borderColor: "#fff" }}
+        >
+          Back to Landing Page
+        </Button>
       </Container>
     );
   }
@@ -81,7 +108,7 @@ const ResetPasswordPage = () => {
           <Form>
             <Box mb={2}>
               <Field
-                as={TextField}
+                as={StyledTextField}
                 name="newPassword"
                 type="password"
                 label="New Password"
@@ -93,7 +120,7 @@ const ResetPasswordPage = () => {
             </Box>
             <Box mb={2}>
               <Field
-                as={TextField}
+                as={StyledTextField}
                 name="confirmPassword"
                 type="password"
                 label="Confirm Password"
@@ -110,6 +137,13 @@ const ResetPasswordPage = () => {
               disabled={isSubmitting || loading}
             >
               {loading ? <CircularProgress size={24} /> : "Reset Password"}
+            </Button>
+            <Button
+              variant="outlined"
+              onClick={() => navigate("/")}
+              style={{ marginTop: "20px", color: "#fff", borderColor: "#fff" }}
+            >
+              Back to Main Page
             </Button>
           </Form>
         )}

@@ -1,7 +1,7 @@
-// src/components/ForgotPassword.js
 import React, { useState, useEffect } from "react";
 import authService from "../services/authService";
 import { Box, TextField, Button, Typography, styled } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const FormContainer = styled(Box)({
   display: "flex",
@@ -33,15 +33,30 @@ const SubmitButton = styled(Button)({
   },
 });
 
+const BackButton = styled(Button)({
+  marginTop: "10px",
+  color: "#fff",
+  backgroundColor: "#6c757d",
+  "&:hover": {
+    backgroundColor: "#5a6268",
+  },
+});
+
 const Message = styled(Typography)({
   marginTop: "10px",
   color: "#ff4d4d", // Red color for error messages
+});
+
+const SuccessMessage = styled(Typography)({
+  marginTop: "10px",
+  color: "#4CAF50", // Green color for success messages
 });
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [csrfToken, setCsrfToken] = useState("");
+  const navigate = useNavigate(); // To navigate between routes
 
   useEffect(() => {
     const fetchCsrfToken = async () => {
@@ -51,6 +66,9 @@ const ForgotPassword = () => {
         setCsrfToken(data.csrfToken);
       } catch (error) {
         console.error("Failed to fetch CSRF token", error);
+        setMessage(
+          "Failed to retrieve security token. Please refresh the page."
+        );
       }
     };
 
@@ -59,19 +77,34 @@ const ForgotPassword = () => {
 
   const handleForgotPassword = async (e) => {
     e.preventDefault();
+    setMessage(""); // Clear previous messages
     try {
       const sanitizedEmail = sanitizeInput(email);
       const data = await authService.forgotPassword(sanitizedEmail, csrfToken);
-      setMessage(data.message);
+      if (data.success) {
+        setMessage("Password reset link sent. Please check your email.");
+      } else if (data.error === "Email not found") {
+        setMessage("No account is associated with this email.");
+      } else {
+        setMessage(data.error || "An error occurred. Please try again.");
+      }
     } catch (error) {
       console.error("Password reset request failed", error);
-      setMessage("An error occurred. Please try again later.");
+      setMessage(
+        error.response?.status === 500
+          ? "Server error. Please try again later."
+          : "An unexpected error occurred. Please try again."
+      );
     }
   };
 
   const sanitizeInput = (input) => {
     // Simple sanitization; customize if needed
     return input.trim();
+  };
+
+  const handleBackToLanding = () => {
+    navigate("/"); // Navigate back to the landing page
   };
 
   return (
@@ -92,8 +125,19 @@ const ForgotPassword = () => {
         <SubmitButton type="submit" variant="contained">
           Send Reset Link
         </SubmitButton>
-        {message && <Message>{message}</Message>}
+        {message && (
+          <Message>
+            {message.includes("error") ? (
+              message
+            ) : (
+              <SuccessMessage>{message}</SuccessMessage>
+            )}
+          </Message>
+        )}
       </Form>
+      <BackButton variant="contained" onClick={handleBackToLanding}>
+        Back to Landing Page
+      </BackButton>
     </FormContainer>
   );
 };

@@ -12,6 +12,9 @@ import ForgotPassword from "./pages/ForgotPassword";
 import CheckEmail from "./pages/CheckEmail";
 import VerifyEmailPage from "./pages/Emailverifypage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
+import ErrorPage from "./components/ErrorPage";
+
+
 
 const App = () => {
   return (
@@ -37,6 +40,7 @@ const App = () => {
           <Route path="/check-email" element={<CheckEmail />} />
           <Route path="/verify-email" element={<VerifyEmailPage />} />
           <Route path="/reset-password" element={<ResetPasswordPage />} />
+          <Route path="/error" element={<ErrorPage />} />
         </Routes>
       </AuthProvider>
     </Router>

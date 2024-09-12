@@ -1,94 +1,95 @@
-// src/components/RegisterForm.js
-import { useState, useContext } from "react";
+import { useContext } from "react";
 import { AuthContext } from "../contexts/AuthContext";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
 import DOMPurify from "dompurify";
 import { escapeHtml } from "../utils/securityUtils";
 import "../styles/form.css";
 
 const RegisterForm = () => {
   const { register } = useContext(AuthContext);
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [nameError, setNameError] = useState("");
-  const [emailError, setEmailError] = useState("");
-  const [passwordError, setPasswordError] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
 
-  const validateEmail = (email) => {
-    // Basic email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
+  // Validation schema using Yup
+  const validationSchema = Yup.object({
+    name: Yup.string().required("Name is required"),
+    email: Yup.string()
+      .email("Invalid email address")
+      .required("Email is required"),
+    password: Yup.string()
+      .min(6, "Password must be at least 6 characters long")
+      .required("Password is required"),
+  });
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setNameError("");
-    setEmailError("");
-    setPasswordError("");
-    setSuccessMessage(""); // Clear success message
-
-    // Validate inputs
-    if (name.trim() === "") {
-      setNameError("Name is required.");
-      return;
-    }
-    if (!validateEmail(email)) {
-      setEmailError("Invalid email address.");
-      return;
-    }
-    if (password.trim() === "") {
-      setPasswordError("Password is required.");
-      return;
-    }
-
-    try {
-      await register({
-        name: sanitizeInput(name),
-        email: sanitizeInput(email),
-        password: sanitizeInput(password),
-      });
-      setSuccessMessage(
-        "Registration successful. Please check your email to verify your account."
-      );
-    } catch (error) {
-      console.error("Registration failed", error);
-      // Optionally, set error messages here
-    }
-  };
-
+  // Sanitize input before sending to the backend
   const sanitizeInput = (input) => {
     return DOMPurify.sanitize(escapeHtml(input));
   };
 
+  const handleSubmit = async (
+    values,
+    { setSubmitting, setStatus, setErrors }
+  ) => {
+    setStatus(null); // Clear status message before submitting
+    try {
+      await register({
+        name: sanitizeInput(values.name),
+        email: sanitizeInput(values.email),
+        password: sanitizeInput(values.password),
+      });
+      setStatus(
+        "Registration successful. Please check your email to verify your account."
+      );
+    } catch (error) {
+      console.error("Registration failed", error);
+
+      // Handle specific error messages from the backend
+      if (error.response && error.response.status === 400) {
+        const errorMessage = error.response.data.error;
+        if (errorMessage === "Email already in use") {
+          setErrors({ email: "Email is already registered." });
+        } else {
+          setStatus(errorMessage || "Registration failed. Please try again.");
+        }
+      } else {
+        setStatus("An unexpected error occurred. Please try again.");
+      }
+    }
+    setSubmitting(false);
+  };
+
   return (
-    <form onSubmit={handleSubmit}>
-      <input
-        type="text"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        placeholder="Name"
-      />
-      {nameError && <div className="error">{nameError}</div>}
-      <input
-        type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        placeholder="Email"
-      />
-      {emailError && <div className="error">{emailError}</div>}
-      <input
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        placeholder="Password"
-      />
-      {passwordError && <div className="error">{passwordError}</div>}
-      <button className="btn-submit" type="submit">
-        Register
-      </button>
-      {successMessage && <div className="success">{successMessage}</div>}
-    </form>
+    <Formik
+      initialValues={{ name: "", email: "", password: "" }}
+      validationSchema={validationSchema}
+      onSubmit={handleSubmit}
+    >
+      {({ isSubmitting, status }) => (
+        <Form>
+          <div>
+            <Field type="text" name="name" placeholder="Name" />
+            <ErrorMessage name="name" component="div" className="error" />
+          </div>
+          <div>
+            <Field type="email" name="email" placeholder="Email" />
+            <ErrorMessage name="email" component="div" className="error" />
+          </div>
+          <div>
+            <Field type="password" name="password" placeholder="Password" />
+            <ErrorMessage name="password" component="div" className="error" />
+          </div>
+          <button className="btn-submit" type="submit" disabled={isSubmitting}>
+            {isSubmitting ? "Registering..." : "Register"}
+          </button>
+          {status && (
+            <div
+              className={status.includes("successful") ? "success" : "error"}
+            >
+              {status}
+            </div>
+          )}
+        </Form>
+      )}
+    </Formik>
   );
 };
 

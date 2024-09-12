@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Box, Typography, CircularProgress, styled } from "@mui/material";
-import useAuth from "../hooks/useAuth";
+import { AuthContext } from "../contexts/AuthContext";
 
 const Container = styled(Box)({
   display: "flex",
@@ -22,7 +22,7 @@ const Message = styled(Typography)({
 const VerifyEmailPage = () => {
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token");
-  const { verifyEmail } = useAuth();
+  const { verifyEmail } = AuthContext();
 
   useEffect(() => {
     console.log("Token received:", token); // Debug: Log the token
