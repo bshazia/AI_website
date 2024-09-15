@@ -7,7 +7,8 @@ const csrf = require("csurf");
 const cookieParser = require("cookie-parser");
 const fs = require("fs");
 const cors = require("cors");
-const config = require("./config/config"); // Updated path to config file
+const config = require("./config/config"); 
+
 
 // CORS configuration
 app.use(
@@ -25,12 +26,28 @@ app.use(cookieParser());
 const csrfProtection = csrf({ cookie: true });
 app.use(csrfProtection);
 app.use((req, res, next) => {
-  res.locals.csrfToken = req.csrfToken(); // Include the CSRF token in all responses
+  res.locals.csrfToken = req.csrfToken(); 
   next();
 });
 
 // Security middleware
-app.use(helmet());
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"], // Allow resources from the same origin
+        scriptSrc: ["'self'"],  // Allow scripts from the same origin
+        connectSrc: ["'self'", "https://api.openai.com"], // Allow connections to OpenAI API
+        imgSrc: ["'self'", "data:", "blob:", "https://oaidalleapiprodscus.blob.core.windows.net"], // Allow images from OpenAI Blob Storage
+        styleSrc: ["'self'", "'unsafe-inline'"], // Allow inline styles (if needed)
+        fontSrc: ["'self'", "https://fonts.googleapis.com", "https://fonts.gstatic.com"], // Allow Google Fonts
+        objectSrc: ["'none'"], // Block <object> and <embed>
+        upgradeInsecureRequests: [], // Ensure HTTPS is used (optional)
+      },
+    },
+  })
+);
+
 app.use(xss());
 
 // Middleware to parse JSON requests
@@ -39,6 +56,8 @@ app.use(express.json());
 // API routes
 app.use("/api", require("./routes/authRoutes")); // Updated path
 app.use("/api", require("./routes/chatGPTRoutes")); // Updated path
+app.use("/api", require("./routes/summarizationRoutes")); // Upda
+
 
 // CSRF token route for your frontend to request the token if needed
 app.get("/api/get-csrf-token", (req, res) => {

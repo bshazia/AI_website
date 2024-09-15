@@ -6,6 +6,9 @@ import ForgotPassword from "./pages/ForgotPassword";
 import CheckEmail from "./pages/CheckEmail";
 import VerifyEmailPage from "./pages/Emailverifypage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
+import VideoSummarizationPage from "./pages/VideoSummarizationPage";
+import TextProcessingPage from "./pages/TextProcessingPage";
+
 
 
 
@@ -19,5 +22,7 @@ const routes = [
   { path: "/verify-email", element: <VerifyEmailPage /> },
   { path: "/reset-password", element: <ResetPasswordPage /> },
   { path: "/error", element: <ErrorPage /> },
+  { path: "/video-summarization", element: <VideoSummarizationPage /> },
+  { path: "/text-summary", element: <TextProcessingPage /> },
 ];
 export default routes;

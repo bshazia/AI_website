@@ -4,9 +4,7 @@
       height: 100%;
       width: 100%;
       overflow: hidden;
-      background-repeat: no-repeat;
-        
-        background-attachment: fixed;
+      color: #282c34;
         
 }
 .App {

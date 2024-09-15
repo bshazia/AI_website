@@ -85,10 +85,18 @@ const Dashboard = () => {
     <>
       <Helmet>
         <title>AI Tools for All</title>
-        {/* Apply security headers */}
+        {/* Update CSP to allow external API connections and image sources */}
         <meta
           httpEquiv="Content-Security-Policy"
-          content="default-src 'self'; script-src 'self';"
+          content="
+      default-src 'self';
+      connect-src 'self' https://api.openai.com;
+      script-src 'self';
+      img-src 'self' data: blob: https://oaidalleapiprodscus.blob.core.windows.net;
+      frame-src 'self';
+      font-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com;
+      style-src 'self' 'unsafe-inline';
+    "
         />
       </Helmet>
 
@@ -97,9 +105,9 @@ const Dashboard = () => {
           <Logo variant="h4">AI For Gen Z</Logo>
           <Box display="flex" justifyContent="center" alignItems="center">
             <NavLink to="/imageservice">Image Tools</NavLink>
-            <NavLink to="/chatgpt">Freedom AI</NavLink>
-            {/* <NavLink to="/article">Writing Tools</NavLink>
-            <NavLink to="/video">Video Tools</NavLink> */}
+            <NavLink to="/chatgpt">AI Chat</NavLink>
+            <NavLink to="/generate-image">Text To Image</NavLink>
+            <NavLink to="/summarize">Convert Video to Text</NavLink>
             {isLoggedIn && (
               <LogoutButton onClick={handleLogout} variant="contained">
                 Logout

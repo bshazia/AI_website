@@ -138,39 +138,39 @@ function ChatComponent() {
   // Store the original message for each AI response
   const [originalMessages, setOriginalMessages] = useState({});
 
-const sendMessage = async () => {
-  const sanitizedMessage = sanitizeMessage(userMessage);
+  const sendMessage = async () => {
+    const sanitizedMessage = sanitizeMessage(userMessage);
 
-  if (sanitizedMessage.trim() !== "") {
-    const newMessages = [
-      ...messages,
-      { sender: "You", message: sanitizedMessage },
-    ];
-    setMessages(newMessages);
+    if (sanitizedMessage.trim() !== "") {
+      const newMessages = [
+        ...messages,
+        { sender: "You", message: sanitizedMessage },
+      ];
+      setMessages(newMessages);
 
-    // Clear the input field immediately
-    setUserMessage("");
+      // Clear the input field immediately
+      setUserMessage("");
 
-    // Store the original message for regeneration
-    const messageId = newMessages.length - 1;
-    setOriginalMessages((prev) => ({
-      ...prev,
-      [messageId]: sanitizedMessage,
-    }));
+      // Store the original message for regeneration
+      const messageId = newMessages.length - 1;
+      setOriginalMessages((prev) => ({
+        ...prev,
+        [messageId]: sanitizedMessage,
+      }));
 
-    try {
-      await handleSendMessage(sanitizedMessage);
-    } catch (error) {
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        {
-          sender: "AI 4.O",
-          message: "An error occurred. Please try again later.",
-        },
-      ]);
+      try {
+        await handleSendMessage(sanitizedMessage);
+      } catch (error) {
+        setMessages((prevMessages) => [
+          ...prevMessages,
+          {
+            sender: "AI 4.O",
+            message: "An error occurred. Please try again later.",
+          },
+        ]);
+      }
     }
-  }
-};
+  };
 
   const regenerateResponse = async (messageId) => {
     const originalMessage = originalMessages[messageId];
@@ -228,19 +228,13 @@ const sendMessage = async () => {
   };
 
   const handleTextToSpeech = (text) => {
-    // Stop any ongoing speech synthesis
-    if (window.speechSynthesis.speaking) {
-      window.speechSynthesis.cancel();
+    // Check if the speechSynthesis API is supported
+    if ("speechSynthesis" in window) {
+      const utterance = new SpeechSynthesisUtterance(text);
+      speechSynthesis.speak(utterance);
+    } else {
+      console.error("Text-to-speech is not supported in this browser.");
     }
-
-    // Create a new SpeechSynthesisUtterance and speak it
-    const utterance = new SpeechSynthesisUtterance(text);
-    window.speechSynthesis.speak(utterance);
-  };
-
-  const handleCopy = (text) => {
-    // Copy to clipboard
-    navigator.clipboard.writeText(text);
   };
 
   const handleFeedback = (type, message) => {

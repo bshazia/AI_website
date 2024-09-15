@@ -1,5 +1,5 @@
-const nodemailer = require('nodemailer');
-const logger = require('../config/logger');
+const nodemailer = require("nodemailer");
+const logger = require("../config/logger");
 
 const sendVerificationEmail = (email, token) => {
   logger.info(`Email is: ${email}`);
@@ -10,7 +10,7 @@ const sendVerificationEmail = (email, token) => {
 
   const transporter = nodemailer.createTransport({
     host: "mail.aitool4all.com", // SMTP host
-    port: 465,                  // Correct port for secure connections
+    port: 465, // Correct port for secure connections
     secure: true,
     auth: {
       user: process.env.EMAIL_USERNAME,
@@ -20,10 +20,12 @@ const sendVerificationEmail = (email, token) => {
 
   const verificationUrl = `https://aitool4all.com/verify-email?token=${token}`;
   const mailOptions = {
-    from: process.env.EMAIL_USERNAME,
+    from: `"AITOOL4ALL Support" <${process.env.EMAIL_USERNAME}>`,
+    replyTo: `"AITOOL4ALL Support" <${process.env.EMAIL_USERNAME}>`,
     to: email,
     subject: "Verify your email",
     text: `Click the following link to verify your email: ${verificationUrl}`,
+    html: `<p>Click the following link to verify your email:</p><a href="${verificationUrl}">Verify Email</a>`, // Optional HTML format
   };
 
   transporter.sendMail(mailOptions, (error, info) => {
