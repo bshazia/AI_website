@@ -63,7 +63,7 @@ const Header = () => {
             <MenuItem component={Link} to="/profile" onClick={handleClose}>
               Profile
             </MenuItem>
-            <MenuItem onClick={handleLogout}>Logout</MenuItem>
+            <MenuItem onClick={handleLogout}>Log out</MenuItem>
           </Menu>
         </div>
       </Toolbar>

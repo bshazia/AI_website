@@ -90,7 +90,7 @@ const Dashboard = () => {
           httpEquiv="Content-Security-Policy"
           content="
       default-src 'self';
-      connect-src 'self' https://api.openai.com;
+      connect-src 'self' https://aitool4all.com http://localhost:5000 https://api.openai.com;
       script-src 'self';
       img-src 'self' data: blob: https://oaidalleapiprodscus.blob.core.windows.net;
       frame-src 'self';

@@ -1,5 +1,5 @@
-// src/pages/VideoSummarizationPage.js
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Button,
   TextField,
@@ -8,9 +8,11 @@ import {
   CircularProgress,
   Typography,
   Paper,
-  CssBaseline, // Correct import for CssBaseline
+  CssBaseline,
+  IconButton,
 } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { saveAs } from "file-saver";
 import { useVideoSummarization } from "../hooks/useVideoSummarization";
 
@@ -43,26 +45,49 @@ const VideoSummarizationPage = () => {
     isLoading,
     handleSummarize,
   } = useVideoSummarization();
+  const navigate = useNavigate();
 
   const handleDownload = () => {
     const blob = new Blob([summary], { type: "text/plain;charset=utf-8" });
     saveAs(blob, "summary.txt");
   };
 
+  const handleGoBack = () => {
+    navigate("/dashboard");
+  };
+
   return (
     <ThemeProvider theme={darkTheme}>
-      <CssBaseline /> {/* Apply global styles including background color */}
+      <CssBaseline />
+
       <Paper
         style={{
           padding: "20px",
           maxWidth: "800px",
           margin: "20px auto",
           backgroundColor: darkTheme.palette.background.paper,
+          position: "relative", // Ensure relative positioning for the back button
+          paddingTop: "80px", // Added padding to push down the content
         }}
       >
+        {/* Back Button */}
+        <IconButton
+          onClick={handleGoBack}
+          style={{
+            position: "absolute",
+            top: "20px",
+            left: "20px",
+            color: "#90caf9", // Matching the primary color of the theme
+          }}
+        >
+          <ArrowBackIcon fontSize="large" />
+        </IconButton>
+
         <Typography variant="h4" color="primary" gutterBottom>
-          Let's Summarrize YouTube Video
+          Let's Summarize YouTube Video
         </Typography>
+
+        {/* Input Fields */}
         <TextField
           label="YouTube Video URL"
           variant="outlined"
@@ -72,16 +97,23 @@ const VideoSummarizationPage = () => {
           margin="normal"
           InputLabelProps={{ style: { color: darkTheme.palette.text.primary } }}
         />
+
         <Select
           value={summaryType}
           onChange={(e) => setSummaryType(e.target.value)}
           fullWidth
           variant="outlined"
           margin="normal"
+          style={{
+            marginTop: "10px",
+            color: darkTheme.palette.text.primary,
+            backgroundColor: darkTheme.palette.background.paper,
+          }}
         >
           <MenuItem value="Detailed">Detailed</MenuItem>
           <MenuItem value="Short">Short</MenuItem>
         </Select>
+
         <Button
           variant="contained"
           color="primary"

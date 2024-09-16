@@ -6,7 +6,7 @@ const TextToImagePage = () => {
   const [prompt, setPrompt] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate(); // Hook to navigate to other pages
+  const navigate = useNavigate();
 
   const handleGenerateImage = async () => {
     if (!prompt.trim()) {
@@ -15,11 +15,12 @@ const TextToImagePage = () => {
     }
 
     setLoading(true);
-    setImageUrl("");
+    setImageUrl(""); // Clear the previous image
 
     try {
-      const url = await generateDalleImage(prompt);
-      setImageUrl(url);
+      const response = await generateDalleImage(prompt); // Generate image and get the URL
+      console.log("Generated Image URL:", response);
+      setImageUrl(response.imageUrl); // Update the imageUrl state
     } catch (error) {
       alert(error.message || "Error generating image, please try again.");
     } finally {
@@ -28,7 +29,7 @@ const TextToImagePage = () => {
   };
 
   const handleGoBack = () => {
-    navigate("/dashboard"); // Navigate back to Dashboard page
+    navigate("/dashboard");
   };
 
   return (
@@ -44,7 +45,7 @@ const TextToImagePage = () => {
       <button
         onClick={handleGoBack}
         style={{
-          backgroundColor: "#007bff", // Back arrow button color
+          backgroundColor: "#007bff",
           color: "#fff",
           border: "none",
           borderRadius: "50%",
@@ -90,9 +91,14 @@ const TextToImagePage = () => {
           {loading ? "Generating..." : "Generate Image"}
         </button>
 
+        {/* Ensure this block is rendered if imageUrl is not empty */}
         {imageUrl && (
           <div style={{ marginTop: "20px" }}>
-            <img src={imageUrl} alt="Generated" style={{ maxWidth: "100%" }} />
+            <img
+              src={imageUrl}
+              alt="Generated"
+              style={{ maxWidth: "100%", height: "auto" }}
+            />
           </div>
         )}
       </div>

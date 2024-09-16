@@ -24,8 +24,22 @@ const sendVerificationEmail = (email, token) => {
     replyTo: `"AITOOL4ALL Support" <${process.env.EMAIL_USERNAME}>`,
     to: email,
     subject: "Verify your email",
-    text: `Click the following link to verify your email: ${verificationUrl}`,
-    html: `<p>Click the following link to verify your email:</p><a href="${verificationUrl}">Verify Email</a>`, // Optional HTML format
+    html: `
+    <html>
+      <body>
+        <p>Hello,</p>
+        <p>Click the following link to verify your email:</p>
+        <p><a href="${verificationUrl}">Verify your email</a></p>
+        <br>
+        <p>Best regards,</p>
+        <p>The AITTOL4ALL Team</p>
+        <br>
+        <img src="https://aitool4all.com/AIapp/logo.png" alt="AITTOL4ALL Logo" style="width:150px;">
+        <br>
+        <p>Visit us at <a href="https://aitool4all.com">AITTOL4ALL</a></p>
+      </body>
+    </html>
+  `,
   };
 
   transporter.sendMail(mailOptions, (error, info) => {

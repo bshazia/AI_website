@@ -263,7 +263,21 @@ function ChatComponent() {
 
       <ChatContainer>
         {/* Back Button */}
-        <BackButton onClick={handleBack}>
+        <BackButton
+          onClick={handleBack}
+          style={{
+            backgroundColor: "#007bff",
+            color: "#fff",
+            border: "none",
+            borderRadius: "50%",
+            padding: "10px",
+            cursor: "pointer",
+            position: "absolute",
+            top: "10px",
+            right: "200px",
+            fontSize: "24px",
+          }}
+        >
           <ArrowBackIcon />
         </BackButton>
 

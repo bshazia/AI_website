@@ -81,7 +81,7 @@ const ImageService = () => {
       <Header>
         <Container>
           <Logo variant="h4">AI For Gen Z</Logo>
-          <NavLink to="/dashboard">Dashboard Page</NavLink>
+          <NavLink to="/dashboard"> Homa page</NavLink>
           <ServiceTabs
             value={selectedService}
             onChange={handleChange}
