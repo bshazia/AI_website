@@ -54,9 +54,11 @@ app.use(xss());
 app.use(express.json());
 
 // API routes
-app.use("/api", require("./routes/authRoutes")); // Updated path
-app.use("/api", require("./routes/chatGPTRoutes")); // Updated path
-app.use("/api", require("./routes/summarizationRoutes")); // Upda
+app.use("/api", require("./routes/authRoutes")); 
+app.use("/api", require("./routes/chatGPTRoutes")); 
+app.use("/api", require("./routes/summarizationRoutes")); 
+app.use("/api", require("./routes/imageRoute")); 
+
 
 
 // CSRF token route for your frontend to request the token if needed

@@ -21,7 +21,7 @@ const TextToImagePage = () => {
       const url = await generateDalleImage(prompt);
       setImageUrl(url);
     } catch (error) {
-      alert("Error generating image, please try again.");
+      alert(error.message || "Error generating image, please try again.");
     } finally {
       setLoading(false);
     }

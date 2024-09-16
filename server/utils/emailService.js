@@ -18,7 +18,7 @@ const sendVerificationEmail = (email, token) => {
     },
   });
 
-  const verificationUrl = `https://aitool4all.com/verify-email?token=${token}`;
+  const verificationUrl = `http://localhost:3000/api/verify-email?token=${token}`;
   const mailOptions = {
     from: `"AITOOL4ALL Support" <${process.env.EMAIL_USERNAME}>`,
     replyTo: `"AITOOL4ALL Support" <${process.env.EMAIL_USERNAME}>`,

@@ -53,7 +53,12 @@ const RegisterForm = () => {
       );
     } catch (error) {
       console.error("Registration failed", error);
-      // Optionally, set error messages here
+        if (error.response && error.response.data && error.response.data.error) {
+          // Set the error message from backend response
+          setEmailError(error.response.data.error);
+        } else {
+          setEmailError("An unexpected error occurred.");
+      }
     }
   };
 

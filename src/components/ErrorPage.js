@@ -23,12 +23,9 @@ const ErrorPage = () => {
   return (
     <Container>
       <Typography variant="h4" gutterBottom>
-        Oops! Something went wrong.
+        Please go back and try to login.
       </Typography>
-      <Typography variant="h6">
-        We encountered an error while processing your request. Please try again
-        later.
-      </Typography>
+      <Typography variant="h6"> Oops! Something went wrong. </Typography>
       <Button
         variant="contained"
         color="primary"

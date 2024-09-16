@@ -1,8 +1,10 @@
+// src/components/LoginForm.js
+
 import React from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { useContext } from "react";
-import { Link } from "react-router-dom"; // Import Link here
+import { useContext, useState } from "react";
+import { Link } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthContext";
 import DOMPurify from "dompurify";
 import { escapeHtml } from "../utils/securityUtils";
@@ -18,6 +20,8 @@ const validationSchema = Yup.object({
 
 const LoginForm = () => {
   const { login } = useContext(AuthContext);
+  const [errorMessage, setErrorMessage] = useState(""); // State for displaying error messages
+
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -30,9 +34,19 @@ const LoginForm = () => {
           email: sanitizeInput(values.email),
           password: sanitizeInput(values.password),
         });
+        // Redirect or handle successful login
       } catch (error) {
         console.error("Login failed", error);
-        // You might want to show an error message to the user here
+        if (
+          error.response &&
+          error.response.data &&
+          error.response.data.error
+        ) {
+          // Display backend error message
+          setErrorMessage(error.response.data.error);
+        } else {
+          setErrorMessage("An unexpected error occurred.");
+        }
       }
     },
   });
@@ -70,12 +84,12 @@ const LoginForm = () => {
             <div className="error">{formik.errors.password}</div>
           ) : null}
         </div>
+        {errorMessage && <div className="error">{errorMessage}</div>}
         <button className="btn-submit" type="submit">
           Login
         </button>
       </form>
-      <Link to="/forgot-password">Forgot your password?</Link>{" "}
-      {/* Link to forgot password page */}
+      <Link to="/forgot-password">Forgot your password?</Link>
     </div>
   );
 };

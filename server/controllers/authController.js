@@ -103,9 +103,10 @@ const login = async (req, res) => {
 
   try {
     // Find user by email
-    const user = await User.findByEmail(email);
-    if (!user)
-      return res.status(401).json({ error: "Invalid email or password" });
+     const user = await User.findByEmail(email);
+     if (!user) {
+       return res.status(400).json({ error: "User not found" });
+     }
 
     // Check if email is verified
     if (!user.email_verified) {
@@ -127,8 +128,8 @@ const login = async (req, res) => {
     );
     res.json({ token });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Internal server error" });
+    console.error("Login error:", error);
+    res.status(500).json({ error: "An error occurred during login" });
   }
 };
 
@@ -232,6 +233,12 @@ const verifyEmail = async (req, res) => {
   console.log("Received token:", token);
 
   try {
+    // Check if token is present
+    if (!token) {
+      return res.status(400).json({ error: "Token is required" });
+    }
+
+    // Find user by token
     const user = await User.findByVerificationToken(token);
     console.log("User found:", user);
 
@@ -239,6 +246,7 @@ const verifyEmail = async (req, res) => {
       return res.status(400).json({ error: "Invalid or expired token" });
     }
 
+    // Verify the user's email
     await User.verifyUserEmail(user.id);
     console.log("User email verified successfully");
 

@@ -1,26 +1,14 @@
+// services/dalleService.js
 import axios from "axios";
-
-const openaiApiKey = process.env.REACT_APP_OPENAI_API_KEY;
 
 export const generateDalleImage = async (prompt) => {
   try {
-    const response = await axios.post(
-      "https://api.openai.com/v1/images/generations",
-      {
-        prompt,
-        n: 1,
-        size: "1024x1024",
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${openaiApiKey}`,
-        },
-      }
-    );
-
-    return response.data.data[0].url;
+    const response = await axios.post("/api/generate-image", { prompt });
+    const { image, optimizedDescription } = response.data;
+    // Assuming `image` is a URL or base64 encoded string
+    return image; // Return the URL or base64 encoded string of the image
   } catch (error) {
-    console.error("Error generating image from DALL-E:", error);
-    throw error;
+    console.error("Error in generateDalleImage:", error);
+    throw new Error("Error generating image, please try again.");
   }
 };

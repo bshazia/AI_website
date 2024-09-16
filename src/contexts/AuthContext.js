@@ -3,6 +3,7 @@ import React, { createContext, useState, useEffect } from "react";
 import axios from "axios";
 import authService from "../services/authService";
 import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
 export const AuthContext = createContext();
 
@@ -33,6 +34,8 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       console.error("Login failed", error);
       setIsAuthenticated(false);
+          throw error;
+
     }
   };
 
@@ -40,34 +43,39 @@ export const AuthProvider = ({ children }) => {
     try {
       const csrfToken = await getCsrfToken();
       await authService.register(userData, csrfToken);
-      navigate("/check-email"); // Navigate to a page informing user to check email
+      navigate("/check-email"); 
     } catch (error) {
       console.error("Registration failed", error);
-      throw error; // Ensure errors are propagated
+      throw error; 
     }
   };
 
 const verifyEmail = async (token) => {
-  console.log("Verifying email with token:", token); // Debug: Log the token
+  console.log("Verifying email with token:", token);
   try {
+    const csrfToken = Cookies.get("csrfToken"); // Adjust based on how your CSRF token is stored
     const response = await axios.get(
-      `${process.env.REACT_APP_API_URL}/api/verify-email?token=${token}`
+      `${
+        process.env.REACT_APP_API_URL
+      }/api/verify-email?token=${encodeURIComponent(token)}`,
+      { headers: { "X-CSRF-Token": csrfToken } }
     );
-    console.log("API Response:", response); // Debug: Log API response
+    console.log("API Response:", response);
     if (response.status === 200) {
-      console.log("Email verification successful"); 
-      console.log("Redirecting to dashboard "); 
-      navigate("/dashboard"); // Redirect to dashboard on success
-      console.log("woo hoo Redirected to dashboard "); 
+      console.log("Email verification successful");
+      console.log("Redirecting to dashboard");
+      navigate("/dashboard");
+      console.log("woo hoo Redirected to dashboard");
     } else {
-      console.warn("Unexpected response status:", response.status); // Debug: Unexpected status
-      navigate("/error"); // Redirect to an error page
+      console.warn("Unexpected response status:", response.status);
+      navigate("/error");
     }
   } catch (error) {
-    console.error("Email verification failed:", error); // Debug: Log error
+    console.error("Email verification failed:", error);
     navigate("/error");
   }
 };
+
 
 
   const logout = () => {
