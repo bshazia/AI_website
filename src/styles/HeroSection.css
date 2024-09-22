@@ -2,20 +2,29 @@
     text-align: center;
     margin: 40px 0;
     padding: 20px;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(0, 102, 103, 0.893);
     border-radius: 10px;
+    backdrop-filter: blur(10px);
+}
+
+.hero-content {
+    padding: 20px;
 }
 
 .hero-content h2 {
-    font-size: 2.2rem;
+    font-size: 2.5rem;
     margin-bottom: 10px;
+    color: #00e6ff;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
 }
+
+.hero-content p {
+    font-size: 1.2rem;
+    color: #fff;
+}
+
 @media (max-width: 768px) {
-
-
     .hero-content h2 {
         font-size: 1.8rem;
     }
-
-
 }

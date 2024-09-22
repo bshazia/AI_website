@@ -188,3 +188,15 @@ ul {
     /* Example style for logout button */
     color: white;
 }
+.backgroundVideo {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    z-index: -1;
+    /* Ensures the video is behind other elements */
+    pointer-events: none;
+    /* Prevents interaction with the video */
+}

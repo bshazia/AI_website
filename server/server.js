@@ -8,6 +8,11 @@ const cookieParser = require("cookie-parser");
 const fs = require("fs");
 const cors = require("cors");
 const config = require("./config/config"); 
+const bodyParser = require("body-parser");
+const imageRoute = require("./routes/imageRoutes")
+
+
+
 
 
 // CORS configuration
@@ -52,19 +57,31 @@ app.use(xss());
 
 // Middleware to parse JSON requests
 app.use(express.json());
-
-// API routes
-app.use("/api", require("./routes/authRoutes")); 
-app.use("/api", require("./routes/chatGPTRoutes")); 
-app.use("/api", require("./routes/summarizationRoutes")); 
-app.use("/api", require("./routes/imageRoute")); 
-
-
+app.use(bodyParser.json());
 
 // CSRF token route for your frontend to request the token if needed
 app.get("/api/get-csrf-token", (req, res) => {
   res.json({ csrfToken: req.csrfToken() });
 });
+
+
+// API routes
+app.use("/api", require("./routes/authRoutes")); 
+app.use("/api", require("./routes/chatGPTRoutes")); 
+app.use("/api", require("./routes/summarizationRoutes")); 
+app.use("/api", require("./routes/videoRoutes")); 
+app.use("/api", require("./routes/textRoute")); 
+app.use("/api", require("./routes/transcribeVideoRoute")); 
+app.use("/api", require("./routes/TextToImageRoute")); 
+
+
+app.use("/api/images", imageRoute);
+
+
+
+
+
+
 
 // Serve static files from the React build folder in production only
 if (process.env.NODE_ENV === "production") {

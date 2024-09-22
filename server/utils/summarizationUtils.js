@@ -6,8 +6,15 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-// Function to check for available captions (subtitles) for the video
 async function getCaptions(videoUrl) {
+  const sanitizedUrl = videoUrl.trim(); // Remove any leading/trailing spaces
+  console.log("Sanitized video URL:", sanitizedUrl);
+
+  if (!ytdl.validateURL(sanitizedUrl)) {
+    throw new Error("Invalid YouTube video URL");
+  }
+
+  // Fetch video info
   const info = await ytdl.getInfo(videoUrl);
   const tracks =
     info.player_response.captions?.playerCaptionsTracklistRenderer
@@ -22,8 +29,11 @@ async function getCaptions(videoUrl) {
   }
 }
 
+
+
+
 // Summarize text using OpenAI API
-async function summarizeText(text, summaryType) {
+async function summarizeCaptions(text, summaryType) {
   // Limit the length of text to avoid long processing time
   const maxLength = 5000;
   const trimmedText = text.length > maxLength ? text.slice(0, maxLength) : text;
@@ -69,6 +79,6 @@ function splitTextIntoChunks(text, chunkSize = 2048) {
 
 module.exports = {
   getCaptions,
-  summarizeText,
+  summarizeCaptions,
   splitTextIntoChunks,
 };

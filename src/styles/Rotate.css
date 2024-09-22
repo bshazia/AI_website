@@ -1,40 +1,50 @@
-.rotate-container {
+.ai-theme {
+    background-color: #1e1e1e;
+    color: #ffffff;
+    font-family: 'Roboto', sans-serif;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+}
+
+.title {
     text-align: center;
-    margin: 20px;
-   
+    color: #00ffff;
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    text-transform: uppercase;
 }
 
 .editor-container {
-    position: relative;
-    display: inline-block;
-        
-}
-.canvas-container{
-width: fit-content;
-    height: inherit;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    border: 2px solid #00ffff;
+    border-radius: 10px;
 }
 
 .controls {
     margin-top: 10px;
 }
 
-.rotate-button,
-.download-button {
-    background-color: #007bff;
-    color: white;
+.ai-button {
+    background-color: #333;
+    color: #00ffff;
     border: none;
-    padding: 10px 15px;
+    padding: 10px 20px;
     margin: 5px;
     border-radius: 5px;
+    transition: all 0.3s ease;
     cursor: pointer;
-    font-size: 16px;
 }
 
-.rotate-button:hover,
-.download-button:hover {
-    background-color: #0056b3;
+.ai-button:hover {
+    background-color: #00ffff;
+    color: #333;
 }
 
-input[type="file"] {
-    margin-bottom: 20px;
+.download-button {
+    background-color: #00cc66;
+    color: white;
 }

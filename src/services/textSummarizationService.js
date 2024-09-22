@@ -1,32 +1,34 @@
-// services/textSummarizationService.js
 import axios from "axios";
 
-const apiKey = process.env.REACT_APP_OPENAI_API_KEY;
-
-export const summarizeText = async (text, length = "short") => {
+// Fetch CSRF token function
+export const fetchCsrfToken = async () => {
   try {
-    const prompt = `Summarize the following text in a ${
-      length === "short" ? "brief" : "detailed"
-    } manner:\n\n${text}`;
+    const response = await axios.get(
+      `${process.env.REACT_APP_API_URL}/api/get-csrf-token`,
+      { withCredentials: true }
+    );
+    return response.data.csrfToken;
+  } catch (error) {
+    console.error("Error fetching CSRF token:", error);
+    throw error;
+  }
+};
 
-    // Call OpenAI API for summarization
+// Summarize video text
+export const summarizeText = async (videoUrl, summaryType, csrfToken) => {
+  try {
+    const maxTokens = summaryType === "short" ? 150 : 400;
     const response = await axios.post(
-      "https://api.openai.com/v1/completions",
-      {
-        model: "text-davinci-003", // You can use "gpt-3.5-turbo" or any other suitable model
-        prompt,
-        max_tokens: length === "short" ? 150 : 400,
-        temperature: 0.7,
-      },
+      `${process.env.REACT_APP_API_URL}/api/summarize`,
+      { videoUrl, maxTokens },
       {
         headers: {
-          Authorization: `Bearer ${apiKey}`,
+          "X-CSRF-Token": csrfToken,
         },
+        withCredentials: true,
       }
     );
-
-    const summary = response.data.choices[0].text.trim();
-    return summary;
+    return response.data.summary;
   } catch (error) {
     console.error("Error summarizing text:", error);
     throw error;

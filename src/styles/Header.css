@@ -1,37 +1,22 @@
-.header {
-    text-align: center;
-    margin-bottom: 20px;
-    padding: 20px;
-}
-
-.header h1 {
-    font-size: 2.8rem;
-    margin-bottom: 10px;
-}
-
-.header nav {
-    margin-top: 10px;
-}
-
-.header .button {
-    background-color: #fff;
-    color: #0072ff;
-    padding: 10px 20px;
+.header .header-button {
     margin: 0 10px;
-    text-decoration: none;
-    border-radius: 5px;
-    font-weight: bold;
-    transition: background-color 0.3s, color 0.3s;
+    transition: transform 0.3s, background-color 0.3s, color 0.3s;
+    /* Add transition for background color and text color */
 }
 
-.header .login-button:hover,
-.header .signup-button:hover {
-    background-color: #0072ff;
-    color: #fff;
+.header .header-button:hover {
+    transform: scale(1.05);
 }
-@media (max-width: 768px) {
-    .header h1 {
-        font-size: 2rem;
-    }
 
+.header .header-button:focus {
+    outline: none;
+    /* Remove default outline */
+}
+
+.header .header-button:active {
+    transform: scale(0.95);
+    /* Scale down on click for feedback */
+}
+.header{
+        background-color: rgba(2, 39, 51, 0.844);
 }

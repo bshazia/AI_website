@@ -196,20 +196,29 @@ function ChatComponent() {
     return DOMPurify.sanitize(message);
   };
 
-  const decodeHtmlEntities = (html) => {
-    return he.decode(html);
-  };
+const decodeHtmlEntities = (html) => {
+  // Ensure that the input is a string
+  if (typeof html !== "string") {
+    console.error("decodeHtmlEntities expected a string but got:", html);
+    return html; // Return the original value if it's not a string
+  }
+  return he.decode(html);
+};
 
-  useEffect(() => {
-    if (response) {
-      const decodedResponse = decodeHtmlEntities(response);
-      const sanitizedResponse = sanitizeMessage(decodedResponse);
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        { sender: "AI 4.O", message: sanitizedResponse },
-      ]);
-    }
-  }, [response]);
+
+useEffect(() => {
+  if (response) {
+    const decodedResponse = decodeHtmlEntities(
+      response.message ? response.message : response
+    );
+    const sanitizedResponse = sanitizeMessage(decodedResponse);
+    setMessages((prevMessages) => [
+      ...prevMessages,
+      { sender: "AI 4.O", message: sanitizedResponse },
+    ]);
+  }
+}, [response]);
+
 
   const handleKeyPress = (event) => {
     if (event.key === "Enter") {
@@ -263,21 +272,7 @@ function ChatComponent() {
 
       <ChatContainer>
         {/* Back Button */}
-        <BackButton
-          onClick={handleBack}
-          style={{
-            backgroundColor: "#007bff",
-            color: "#fff",
-            border: "none",
-            borderRadius: "50%",
-            padding: "10px",
-            cursor: "pointer",
-            position: "absolute",
-            top: "10px",
-            right: "200px",
-            fontSize: "24px",
-          }}
-        >
+        <BackButton onClick={handleBack}>
           <ArrowBackIcon />
         </BackButton>
 

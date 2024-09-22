@@ -2,7 +2,11 @@ const User = require("../models/user");
 const jwt = require("jsonwebtoken");
 const config = require("../config/config");
 const redis = require("redis");
-const { sendVerificationEmail , sendResetPasswordEmail} = require("../utils/emailService"); // Import the email utility
+const {
+  sendVerificationEmail,
+  sendResetPasswordEmail,
+  sendWelcomeEmail,
+} = require("../utils/emailService"); // Import the email utility
 const crypto = require("crypto");
 const nodemailer = require("nodemailer");
 const util = require("util");
@@ -213,16 +217,18 @@ const resetPassword = async (req, res) => {
   const { token, newPassword } = req.body;
 
   try {
+    // Find user by reset token
     const user = await User.findByResetToken(token);
     if (!user) {
       return res.status(400).json({ error: "Invalid or expired token" });
     }
 
+    // Update user's password
     await User.updatePassword(user.email, newPassword);
 
     res.status(200).json({ message: "Password updated successfully" });
   } catch (error) {
-    console.error(error);
+    console.error("Error in resetPassword controller:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 };
@@ -233,25 +239,29 @@ const verifyEmail = async (req, res) => {
   console.log("Received token:", token);
 
   try {
-    // Check if token is present
-    if (!token) {
-      return res.status(400).json({ error: "Token is required" });
-    }
+        // Check if token is present
+        if (!token) {
+          return res.status(400).json({ error: "Token is required" });
+        }
 
-    // Find user by token
-    const user = await User.findByVerificationToken(token);
-    console.log("User found:", user);
+        // Find user by token
+        const user = await User.findByVerificationToken(token);
+        console.log("User found:", user);
 
-    if (!user) {
-      return res.status(400).json({ error: "Invalid or expired token" });
-    }
+        if (!user) {
+          return res.status(400).json({ error: "Invalid or expired token" });
+        }
 
-    // Verify the user's email
-    await User.verifyUserEmail(user.id);
-    console.log("User email verified successfully");
+        // Verify the user's email
+        await User.verifyUserEmail(user.id);
+        console.log("User email verified successfully");
+        const { email } = user; // Extract email from user object
 
-    res.status(200).json({ message: "Email verified successfully" });
-  } catch (error) {
+        sendWelcomeEmail(email); // Send the welcome email
+
+        res.status(200).json({ message: "Email verified successfully" });
+        // After the account is successfully verified
+      } catch (error) {
     console.error("Error verifying email:", error);
     res.status(500).json({ error: "Internal server error" });
   }

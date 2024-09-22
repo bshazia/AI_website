@@ -2,43 +2,60 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 20px;
+    width: 100%;
+    /* Ensure the converter takes full width */
 }
 
-.file-input,
-.file-type-select {
-    margin: 10px;
+.image-preview {
+    width: 100%;
+    margin-top: 10px;
+    text-align: center;
 }
 
-.original-image {
+.original-image,
+.converted-image {
     max-width: 100%;
-    max-height: 300px;
-    margin: 10px;
+    /* Responsive images */
+    height: auto;
+    /* Maintain aspect ratio */
+}
+
+.file-input {
+    margin-bottom: 10px;
+}
+
+.file-type-select {
+    margin-bottom: 20px;
 }
 
 .loading-message {
-    font-size: 16px;
-    color: #007bff;
-    margin: 10px;
+    margin-top: 10px;
 }
 
 .button-container {
-    display: flex;
-    justify-content: center;
-    margin: 20px;
+    margin-top: 20px;
 }
 
 .download-button {
     padding: 10px 20px;
-    background-color: #007bff;
+    background-color: #282c34;
     color: white;
     border: none;
-    border-radius: 5px;
-    font-weight: bold;
     cursor: pointer;
-    text-align: center;
+}
+.ai-theme {
+    background-color: #1e1e1e;
+    color: #ffffff;
+    font-family: 'Roboto', sans-serif;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
 }
 
-.download-button:hover {
-    background-color: #0056b3;
+.title {
+    text-align: center;
+    color: #00ffff;
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    text-transform: uppercase;
 }

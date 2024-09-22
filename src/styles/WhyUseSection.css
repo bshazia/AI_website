@@ -1,22 +1,68 @@
-.why-use ul {
-    list-style: disc;
-    padding-left: 20px;
-}
-@media (max-width: 768px) {
-
-
-    .why-use h2
-    {
-        font-size: 1.6rem;
-    }
+.why-use {
+    margin-bottom: 40px;
+    text-align: center;
+    color: #fff;
+    /* Light text for contrast */
 }
 
-.why-use h2
- {
+.why-use h2 {
     font-size: 2rem;
+    margin-bottom: 20px;
+    text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.7);
+    /* Adds a nice glow effect */
+}
+
+.features-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.feature-item {
+    background: rgba(0, 0, 0, 0.6);
+    /* Semi-transparent background */
+    border-radius: 10px;
+    padding: 20px;
+    margin: 10px;
+    width: calc(100% - 40px);
+    /* Full width minus margins for smaller screens */
+    max-width: 300px;
+    /* Limit width for larger screens */
+    transition: transform 0.3s;
+}
+
+.feature-item:hover {
+    transform: scale(1.05);
+    /* Slight zoom effect on hover */
+}
+
+.feature-item h3 {
+    font-size: 1.5rem;
     margin-bottom: 10px;
 }
 
-.why-use {
-    margin-bottom: 40px;
+.feature-item p {
+    font-size: 1rem;
+}
+
+/* Responsive adjustments */
+@media (min-width: 768px) {
+    .feature-item {
+        width: calc(33% - 40px);
+        /* 3 items in a row on larger screens */
+    }
+
+    .why-use h2 {
+        font-size: 2.5rem;
+        /* Increase header size for larger screens */
+    }
+}
+
+@media (max-width: 768px) {
+    .why-use h2 {
+        font-size: 2rem;
+        /* Reduce header size for smaller screens */
+    }
 }

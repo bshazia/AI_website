@@ -51,6 +51,58 @@ const sendVerificationEmail = (email, token) => {
   });
 };
 
+// Function to send a welcome email after successful verification
+const sendWelcomeEmail = (email) => {
+  logger.info(`Sending welcome email to: ${email}`);
+
+  if (!email) {
+    console.error("Email is missing.");
+    return;
+  }
+   const transporter = nodemailer.createTransport({
+     host: "mail.aitool4all.com",
+     port: 465,
+     secure: true,
+     auth: {
+       user: process.env.EMAIL_USERNAME,
+       pass: process.env.EMAIL_PASSWORD,
+     },
+   });
+
+  const mailOptions = {
+    from: `"AITOOL4ALL Support" <${process.env.EMAIL_USERNAME}>`,
+    replyTo: `"AITOOL4ALL Support" <${process.env.EMAIL_USERNAME}>`,
+    to: email,
+    subject: "Welcome to AITOOL4ALL!",
+    html: `
+    <html>
+      <body>
+        <p>Hello,</p>
+        <p>We are excited to welcome you to AITOOL4ALL!</p>
+        <p>We are thrilled to have you onboard and can't wait for you to explore our platform.</p>
+        <p>If you have any questions, feel free to reach out to us at any time.</p>
+        <br>
+        <p>Best regards,</p>
+        <p>The AITOOL4ALL Team</p>
+        <br>
+        <img src="https://aitool4all.com/AIapp/logo.png" alt="AITTOL4ALL Logo" style="width:150px;">
+        <br>
+        <p>Visit us at <a href="https://aitool4all.com">AITTOL4ALL</a></p>
+      </body>
+    </html>
+    `,
+  };
+
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.error("Error sending welcome email:", error);
+    } else {
+      console.log("Welcome email sent:", info.response);
+    }
+  });
+};
+
+
 const sendResetPasswordEmail = (email, token) => {
   if (!email || !token) {
     console.error("Email or token is missing.");
@@ -67,7 +119,7 @@ const sendResetPasswordEmail = (email, token) => {
     },
   });
 
-  const resetUrl = `${process.env.FRONTEND_URL}/reset-password?token=${token}`;
+  const resetUrl = `http://localhost:3000/api/reset-password?token=${token}`;
   const mailOptions = {
     from: process.env.EMAIL_USERNAME,
     to: email,
@@ -84,4 +136,8 @@ const sendResetPasswordEmail = (email, token) => {
   });
 };
 
-module.exports = { sendVerificationEmail, sendResetPasswordEmail };
+module.exports = {
+  sendVerificationEmail,
+  sendWelcomeEmail,
+  sendResetPasswordEmail,
+};

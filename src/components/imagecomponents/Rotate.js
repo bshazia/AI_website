@@ -1,76 +1,81 @@
 import React, { useState, useRef, useEffect } from "react";
 import AvatarEditor from "react-avatar-editor";
-import "../../styles/Rotate.css"; // Import the CSS file
+import "../../styles/Rotate.css"; // AI robotic-themed styles
 
 function Rotate() {
   const [image, setImage] = useState(null);
   const [rotate, setRotate] = useState(0);
   const editorRef = useRef(null);
-  const imageUrlRef = useRef(null);
 
   useEffect(() => {
     return () => {
-      if (imageUrlRef.current) {
-        URL.revokeObjectURL(imageUrlRef.current); // Cleanup URL
-      }
+      if (image) URL.revokeObjectURL(image);
     };
-  }, []);
+  }, [image]);
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file && file.type.startsWith("image/")) {
-      if (imageUrlRef.current) {
-        URL.revokeObjectURL(imageUrlRef.current); // Cleanup previous URL
-      }
-      const url = URL.createObjectURL(file);
-      imageUrlRef.current = url;
-      setImage(url);
+      const img = new Image();
+      img.src = URL.createObjectURL(file);
+      img.onload = () => {
+        setImage(URL.createObjectURL(file));
+      };
     } else {
       alert("Please select a valid image file.");
     }
   };
 
-  const handleRotateLeft = () => {
-    setRotate((prevRotate) => (prevRotate - 90) % 360); // Rotate left by 90 degrees
-  };
-
-  const handleRotateRight = () => {
-    setRotate((prevRotate) => (prevRotate + 90) % 360); // Rotate right by 90 degrees
-  };
+  const handleRotateLeft = () => setRotate((prev) => (prev - 90) % 360);
+  const handleRotateRight = () => setRotate((prev) => (prev + 90) % 360);
 
   const handleDownload = () => {
     if (editorRef.current) {
       editorRef.current.getImageScaledToCanvas().toBlob((blob) => {
-        if (blob) {
-          const url = URL.createObjectURL(blob);
-          const link = document.createElement("a");
-          link.href = url;
-          link.download = "rotated-image.png"; // Download file name
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-        }
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "rotated-image.png";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
       }, "image/png");
     }
   };
 
   return (
-    <div className="rotate-container">
-      <h1>Rotate Your Image Here</h1>
+    <div className="rotate-container ai-theme">
+      <h1 className="title">AI-Powered Image Rotation</h1>
       <input type="file" onChange={handleFileChange} accept="image/*" />
       {image && (
         <div className="editor-container">
-          <div className="canvas-container">
-            <AvatarEditor ref={editorRef} image={image} rotate={rotate} />
-          </div>
+          <AvatarEditor
+            ref={editorRef}
+            image={image}
+            width={250}
+            height={250}
+            border={50}
+            color={[34, 34, 34, 0.8]} // Dark robotic theme
+            rotate={rotate}
+          />
           <div className="controls">
-            <button onClick={handleRotateLeft} className="rotate-button">
+            <button
+              onClick={handleRotateLeft}
+              className="rotate-button ai-button"
+            >
               Rotate Left
             </button>
-            <button onClick={handleRotateRight} className="rotate-button">
+            <button
+              onClick={handleRotateRight}
+              className="rotate-button ai-button"
+            >
               Rotate Right
             </button>
-            <button onClick={handleDownload} className="download-button">
+            <button
+              onClick={handleDownload}
+              className="download-button ai-button"
+            >
               Download
             </button>
           </div>

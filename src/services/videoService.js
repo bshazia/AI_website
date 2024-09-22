@@ -1,37 +1,22 @@
-// src/services/videoService.js
 import axios from "axios";
 
-export const fetchCsrfToken = async () => {
-  try {
-    const response = await axios.get(
-      `${process.env.REACT_APP_API_URL}/api/get-csrf-token`,
-      { withCredentials: true }
-    );
-    return response.data.csrfToken;
-  } catch (err) {
-    console.error("Failed to fetch CSRF token:", err);
-    throw err;
-  }
-};
+export const generateVideoService = async (image, textPrompt, csrfToken) => {
+  const formData = new FormData();
+  formData.append("image", image); // Attach the image directly
+  formData.append("textPrompt", textPrompt); // Attach the prompt
 
-export const summarizeVideo = async (videoUrl, summaryType, csrfToken) => {
-  try {
-    const response = await axios.post(
-      `${process.env.REACT_APP_API_URL}/api/summarize`,
-      {
-        youtubeVideoUrl: videoUrl,
-        typeOfSummary: summaryType,
+  const response = await axios.post(
+    `${process.env.REACT_APP_API_URL}/api/sumarize`,
+    formData,
+    {
+      headers: {
+        "X-CSRF-Token": csrfToken, // Pass CSRF token in the header
+        "Content-Type": "multipart/form-data", // Ensure multipart/form-data is used
       },
-      {
-        headers: {
-          "X-CSRF-Token": csrfToken,
-        },
-        withCredentials: true,
-      }
-    );
-    return response.data.summary;
-  } catch (err) {
-    console.error("Error summarizing video:", err);
-    throw err;
-  }
+      withCredentials: true,
+      responseType: "blob", // Expect a video blob in response
+    }
+  );
+
+  return response.data;
 };

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import {
   Box,
@@ -11,6 +11,7 @@ import {
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as yup from "yup";
 import authService from "../services/authService";
+import axios from "axios";
 
 const { resetPassword } = authService;
 
@@ -60,22 +61,44 @@ const ResetPasswordPage = () => {
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token");
   const [loading, setLoading] = React.useState(false);
+  const [csrfToken, setCsrfToken] = useState(null);
   const navigate = useNavigate();
+
+  // Fetch CSRF token on component mount
+  useEffect(() => {
+    const fetchCsrfToken = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_URL}/api/csrf-token`,
+          {
+            withCredentials: true,
+          }
+        );
+        setCsrfToken(response.data.csrfToken);
+      } catch (error) {
+        console.error("Error fetching CSRF token:", error);
+      }
+    };
+
+    fetchCsrfToken();
+  }, []);
 
   const handlePasswordReset = async (values) => {
     setLoading(true);
     try {
-      const response = await resetPassword(token, values.newPassword);
-      if (response.message === "Password reset successfully") {
-        navigate("/login"); // Redirect to login page after success
+      const response = await resetPassword(
+        token,
+        values.newPassword,
+        csrfToken
+      );
+      if (response.message === "Password updated successfully") {
+        navigate("/dashboard");
       } else {
         alert("Failed to reset password. Please try again.");
       }
     } catch (error) {
       console.error("Error resetting password:", error);
-      alert(
-        "An error occurred while resetting your password. Please try again."
-      );
+      alert(error.message || "An unexpected error occurred. Please try again.");
     } finally {
       setLoading(false);
     }

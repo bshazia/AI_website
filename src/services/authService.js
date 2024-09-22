@@ -54,6 +54,8 @@ const forgotPassword = async (email, csrfToken) => {
         withCredentials: true, // Ensure cookies are sent with the request
       }
     );
+        console.log("Forgot Password API Response:", response);
+
     return response.data;
   } catch (error) {
     throw new Error(
@@ -63,7 +65,7 @@ const forgotPassword = async (email, csrfToken) => {
   }
 };
 // Reset password
-const resetPassword = async (token, newPassword) => {
+const resetPassword = async (token, newPassword, csrfToken) => {
   try {
     const response = await axios.post(
       `${process.env.REACT_APP_API_URL}/api/reset-password`,
@@ -71,18 +73,21 @@ const resetPassword = async (token, newPassword) => {
       {
         headers: {
           "Content-Type": "application/json",
+          "X-CSRF-Token": csrfToken,
         },
-        withCredentials: true, // Ensure cookies are sent with the request
+        withCredentials: true,
       }
     );
     return response.data;
   } catch (error) {
+    console.error("Error during password reset:", error);
     throw new Error(
-      error.response?.data?.message ||
+      error.response?.data?.error ||
         "An error occurred while resetting your password."
     );
   }
 };
+
 
 
 const authService = {

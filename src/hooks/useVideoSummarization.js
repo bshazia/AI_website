@@ -1,6 +1,9 @@
 // src/hooks/useVideoSummarization.js
 import { useState, useEffect } from "react";
-import { fetchCsrfToken, summarizeVideo } from "../services/videoService";
+import {
+  fetchCsrfToken,
+  summarizeText,
+} from "../services/textSummarizationService";
 
 export const useVideoSummarization = () => {
   const [videoUrl, setVideoUrl] = useState("");
@@ -11,6 +14,7 @@ export const useVideoSummarization = () => {
   const [csrfToken, setCsrfToken] = useState("");
 
   useEffect(() => {
+    // Fetch CSRF token only once on component mount
     const getCsrfToken = async () => {
       try {
         const token = await fetchCsrfToken();
@@ -24,13 +28,22 @@ export const useVideoSummarization = () => {
   }, []);
 
   const handleSummarize = async () => {
+    if (!videoUrl) {
+      setError("Please enter a valid video URL.");
+      return;
+    }
+
     setIsLoading(true);
     setSummary("");
     setError("");
 
     try {
-      const summary = await summarizeVideo(videoUrl, summaryType, csrfToken);
-      setSummary(summary);
+      const summaryResult = await summarizeText(
+        videoUrl,
+        summaryType,
+        csrfToken
+      );
+      setSummary(summaryResult);
     } catch (err) {
       setError("Failed to summarize the video. Please try again.");
     } finally {

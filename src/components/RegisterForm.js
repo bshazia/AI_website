@@ -1,9 +1,44 @@
-// src/components/RegisterForm.js
 import { useState, useContext } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 import DOMPurify from "dompurify";
 import { escapeHtml } from "../utils/securityUtils";
-import "../styles/form.css";
+import styled from "styled-components";
+
+
+const Input = styled.input`
+  width: 90%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 2px solid #1b9cfc;
+  border-radius: 5px;
+  color: #55e6c1;
+  background: none;
+  font-size: large;
+  font-weight: bold;
+`;
+
+const Button = styled.button`
+  width: 50%;
+  padding: 10px;
+  border: 2px solid #55e6c1;
+  border-radius: 40px;
+  background: transparent;
+  color: #c1c2c3;
+  font-weight: bolder;
+  cursor: pointer;
+  margin: 20px 0;
+
+  &:hover {
+    background: #55e6c1;
+    color: #182c61;
+  }
+`;
+
+const ErrorMessage = styled.div`
+  color: red;
+  font-size: 12px;
+  margin-top: 5px;
+`;
 
 const RegisterForm = () => {
   const { register } = useContext(AuthContext);
@@ -16,7 +51,6 @@ const RegisterForm = () => {
   const [successMessage, setSuccessMessage] = useState("");
 
   const validateEmail = (email) => {
-    // Basic email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   };
@@ -26,9 +60,8 @@ const RegisterForm = () => {
     setNameError("");
     setEmailError("");
     setPasswordError("");
-    setSuccessMessage(""); // Clear success message
+    setSuccessMessage("");
 
-    // Validate inputs
     if (name.trim() === "") {
       setNameError("Name is required.");
       return;
@@ -53,47 +86,42 @@ const RegisterForm = () => {
       );
     } catch (error) {
       console.error("Registration failed", error);
-        if (error.response && error.response.data && error.response.data.error) {
-          // Set the error message from backend response
-          setEmailError(error.response.data.error);
-        } else {
-          setEmailError("An unexpected error occurred.");
-      }
+      setEmailError(
+        error.response?.data?.error || "An unexpected error occurred."
+      );
     }
   };
 
-  const sanitizeInput = (input) => {
-    return DOMPurify.sanitize(escapeHtml(input));
-  };
+  const sanitizeInput = (input) => DOMPurify.sanitize(escapeHtml(input));
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input
-        type="text"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        placeholder="Name"
-      />
-      {nameError && <div className="error">{nameError}</div>}
-      <input
-        type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        placeholder="Email"
-      />
-      {emailError && <div className="error">{emailError}</div>}
-      <input
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        placeholder="Password"
-      />
-      {passwordError && <div className="error">{passwordError}</div>}
-      <button className="btn-submit" type="submit">
-        Register
-      </button>
-      {successMessage && <div className="success">{successMessage}</div>}
-    </form>
+    <div>
+      <form onSubmit={handleSubmit}>
+        <Input
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="Name"
+        />
+        {nameError && <ErrorMessage>{nameError}</ErrorMessage>}
+        <Input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="Email"
+        />
+        {emailError && <ErrorMessage>{emailError}</ErrorMessage>}
+        <Input
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="Password"
+        />
+        {passwordError && <ErrorMessage>{passwordError}</ErrorMessage>}
+        <Button type="submit">Register</Button>
+        {successMessage && <div className="success">{successMessage}</div>}
+      </form>
+      </div>
   );
 };
 

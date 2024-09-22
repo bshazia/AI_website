@@ -1,18 +1,28 @@
-// src/components/Header.js
 import React from "react";
 import "../styles/Header.css";
+import { Button } from "@mui/material";
 
 const Header = ({ onLoginClick, onSignupClick }) => {
   return (
     <header className="header">
       <h1>AI Tools for Everyone – 100% Free!</h1>
       <nav>
-        <button className="button login-button" onClick={onLoginClick}>
+        <Button
+          variant="contained"
+          color="primary" // Set color to 'primary' for both buttons
+          onClick={onLoginClick}
+          className="header-button"
+        >
           Login
-        </button>
-        <button className="button signup-button" onClick={onSignupClick}>
+        </Button>
+        <Button
+          variant="contained" // Change to 'contained' to match the style
+          color="primary" // Set color to 'primary' for both buttons
+          onClick={onSignupClick}
+          className="header-button"
+        >
           Sign Up
-        </button>
+        </Button>
       </nav>
     </header>
   );

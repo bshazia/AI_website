@@ -61,7 +61,13 @@ const ForgotPassword = () => {
   useEffect(() => {
     const fetchCsrfToken = async () => {
       try {
-        const response = await fetch("/api/get-csrf-token");
+        const response = await fetch(
+          `${process.env.REACT_APP_API_URL}/api/get-csrf-token`,
+          {
+            credentials: "include", // Ensure cookies are sent with the request
+          }
+        );
+        console.log("CSRF Response:", response);
         const data = await response.json();
         setCsrfToken(data.csrfToken);
       } catch (error) {
@@ -72,31 +78,36 @@ const ForgotPassword = () => {
       }
     };
 
-    fetchCsrfToken();
+    fetchCsrfToken(); 
   }, []);
 
-  const handleForgotPassword = async (e) => {
-    e.preventDefault();
-    setMessage(""); // Clear previous messages
-    try {
-      const sanitizedEmail = sanitizeInput(email);
-      const data = await authService.forgotPassword(sanitizedEmail, csrfToken);
-      if (data.success) {
-        setMessage("Password reset link sent. Please check your email.");
-      } else if (data.error === "Email not found") {
-        setMessage("No account is associated with this email.");
-      } else {
-        setMessage(data.error || "An error occurred. Please try again.");
-      }
-    } catch (error) {
-      console.error("Password reset request failed", error);
-      setMessage(
-        error.response?.status === 500
-          ? "Server error. Please try again later."
-          : "An unexpected error occurred. Please try again."
-      );
+const handleForgotPassword = async (e) => {
+  e.preventDefault();
+  setMessage(""); // Clear previous messages
+
+  try {
+    const sanitizedEmail = sanitizeInput(email);
+    const data = await authService.forgotPassword(sanitizedEmail, csrfToken);
+
+    // Check the message in the response
+    if (data.message === "Reset link sent to your email") {
+      setMessage(data.message); // Show success message
+    } else {
+      setMessage("An error occurred. Please try again."); // Show error message
     }
-  };
+  } catch (error) {
+    console.error("Password reset request failed", error);
+
+    // Handle network errors or unexpected responses
+    setMessage(
+      error.response?.status === 500
+        ? "Server error. Please try again later."
+        : "An unexpected error occurred. Please try again."
+    );
+  }
+};
+
+
 
   const sanitizeInput = (input) => {
     // Simple sanitization; customize if needed

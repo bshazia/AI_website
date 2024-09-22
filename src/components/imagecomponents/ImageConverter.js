@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "../../styles/ImageConverter.css"; // Import specific CSS file for styling
 
 function ImageConverter() {
@@ -8,6 +8,24 @@ function ImageConverter() {
   const [filename, setFilename] = useState("converted-image.png"); // Default filename
   const [loading, setLoading] = useState(false); // State to manage loading
   const [conversionPending, setConversionPending] = useState(false); // State to manage pending conversion
+  const [containerWidth, setContainerWidth] = useState(window.innerWidth * 0.5); // 50% of window width
+  const containerRef = useRef(null);
+
+  // Handle resizing of the container
+  useEffect(() => {
+    const handleResize = () => {
+      if (containerRef.current) {
+        setContainerWidth(containerRef.current.offsetWidth);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    handleResize(); // Initial resize calculation
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   // Handle file input change
   const handleFileChange = (e) => {
@@ -65,8 +83,12 @@ function ImageConverter() {
   };
 
   return (
-    <div className="image-converter">
-      <h1>Convert File Type</h1>
+    <div
+      className="image-converter ai-theme"
+      ref={containerRef}
+      style={{ width: "100%" }}
+    >
+      <h1 className="title">Convert File Type</h1>
       <input
         type="file"
         accept="image/*"
@@ -85,7 +107,15 @@ function ImageConverter() {
         <option value="image/bmp">BMP</option>
         <option value="image/tiff">TIFF</option>
       </select>
-      {image && <img src={image} alt="Original" className="original-image" />}
+      {image && (
+        <div className="image-preview">
+          <img
+            src={image}
+            alt="Original"
+            style={{ maxWidth: "100%", height: "auto" }}
+          />
+        </div>
+      )}
       {conversionPending && !loading && (
         <p className="loading-message">
           Select a file type to start conversion...
@@ -96,7 +126,10 @@ function ImageConverter() {
       )}
       {!loading && convertedImage && (
         <div className="button-container">
-          <button onClick={handleDownload} className="download-button">
+          <button
+            onClick={handleDownload}
+            className="download-button ai-button"
+          >
             Download Image
           </button>
         </div>

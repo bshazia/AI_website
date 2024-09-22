@@ -1,4 +1,3 @@
-// src/pages/ImageService.js
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import {
@@ -20,19 +19,23 @@ import ChangeFileType from "../components/imagecomponents/ImageConverter";
 const Header = styled("header")({
   backgroundColor: "#121212",
   padding: "20px",
+  position: "sticky",
+  top: 0,
+  zIndex: 1000,
   boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.5)",
 });
 
 const Logo = styled(Typography)({
   fontWeight: "bold",
-  color: "#fff",
+  color: "#00ffcc", // Robotic theme color
   marginBottom: "10px",
 });
 
 const NavLink = styled(Link)({
   textDecoration: "none",
-  color: "#007bff",
+  color: "#00ffcc", // Robotic theme color
   fontWeight: "500",
+  marginRight: "20px", // Spacing between links
   "&:hover": {
     textDecoration: "underline",
   },
@@ -41,7 +44,7 @@ const NavLink = styled(Link)({
 const ServiceTabs = styled(Tabs)({
   marginBottom: "20px",
   "& .MuiTabs-indicator": {
-    backgroundColor: "#007bff",
+    backgroundColor: "#00ffcc", // Robotic theme color
   },
 });
 
@@ -49,7 +52,7 @@ const ServiceTab = styled(Tab)({
   textTransform: "none",
   color: "#fff",
   "&.Mui-selected": {
-    color: "#007bff",
+    color: "#00ffcc", // Robotic theme color
   },
 });
 
@@ -58,6 +61,7 @@ const ContentBox = styled(Box)({
   backgroundColor: "#1c1c1c",
   borderRadius: "8px",
   color: "#fff",
+  marginTop: "20px", // Add spacing from header
 });
 
 const ImageService = () => {
@@ -76,12 +80,16 @@ const ImageService = () => {
   return (
     <div
       className="image-service"
-      style={{ backgroundColor: "#1c1c1c", minHeight: "100vh" }}
+      style={{
+        backgroundColor: "#1c1c1c",
+        minHeight: "100vh",
+        overflowY: "auto",
+      }}
     >
       <Header>
         <Container>
           <Logo variant="h4">AI For Gen Z</Logo>
-          <NavLink to="/dashboard"> Homa page</NavLink>
+          <NavLink to="/dashboard">Home Page</NavLink>
           <ServiceTabs
             value={selectedService}
             onChange={handleChange}

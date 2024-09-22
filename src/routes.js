@@ -8,7 +8,8 @@ import VerifyEmailPage from "./pages/Emailverifypage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
 import VideoSummarizationPage from "./pages/VideoSummarizationPage";
 import TextProcessingPage from "./pages/TextProcessingPage";
-
+import VideoTranscriptionPage from "./pages/VideoTranscriptionPage";
+import ImageGenerator from "./pages/ImageGenerator";
 
 
 
@@ -24,5 +25,7 @@ const routes = [
   { path: "/error", element: <ErrorPage /> },
   { path: "/video-summarization", element: <VideoSummarizationPage /> },
   { path: "/text-summary", element: <TextProcessingPage /> },
+  { path: "/video-transcription", element: <VideoTranscriptionPage /> },
+  { path: "/ai-image-generator", element: <ImageGenerator /> },
 ];
 export default routes;

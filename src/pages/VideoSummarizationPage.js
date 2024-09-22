@@ -60,117 +60,129 @@ const VideoSummarizationPage = () => {
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
 
-      <Paper
+      {/* Make the entire container scrollable */}
+      <div
         style={{
+          minHeight: "100vh",
+          overflowY: "auto", // Enables vertical scrolling
+          backgroundColor: darkTheme.palette.background.default,
           padding: "20px",
-          maxWidth: "800px",
-          margin: "20px auto",
-          backgroundColor: darkTheme.palette.background.paper,
-          position: "relative", // Ensure relative positioning for the back button
-          paddingTop: "80px", // Added padding to push down the content
         }}
       >
-        {/* Back Button */}
-        <IconButton
-          onClick={handleGoBack}
+        <Paper
           style={{
-            position: "absolute",
-            top: "20px",
-            left: "20px",
-            color: "#90caf9", // Matching the primary color of the theme
-          }}
-        >
-          <ArrowBackIcon fontSize="large" />
-        </IconButton>
-
-        <Typography variant="h4" color="primary" gutterBottom>
-          Let's Summarize YouTube Video
-        </Typography>
-
-        {/* Input Fields */}
-        <TextField
-          label="YouTube Video URL"
-          variant="outlined"
-          fullWidth
-          value={videoUrl}
-          onChange={(e) => setVideoUrl(e.target.value)}
-          margin="normal"
-          InputLabelProps={{ style: { color: darkTheme.palette.text.primary } }}
-        />
-
-        <Select
-          value={summaryType}
-          onChange={(e) => setSummaryType(e.target.value)}
-          fullWidth
-          variant="outlined"
-          margin="normal"
-          style={{
-            marginTop: "10px",
-            color: darkTheme.palette.text.primary,
+            padding: "20px",
+            maxWidth: "800px",
+            margin: "20px auto",
             backgroundColor: darkTheme.palette.background.paper,
+            position: "relative", // Ensure relative positioning for the back button
+            paddingTop: "80px", // Added padding to push down the content
           }}
         >
-          <MenuItem value="Detailed">Detailed</MenuItem>
-          <MenuItem value="Short">Short</MenuItem>
-        </Select>
-
-        <Button
-          variant="contained"
-          color="primary"
-          fullWidth
-          onClick={handleSummarize}
-          disabled={isLoading} // Disable the button while loading
-          style={{ marginTop: "20px" }}
-        >
-          {isLoading ? <CircularProgress size={24} /> : "Summarize"}
-        </Button>
-
-        {/* Loading message */}
-        {isLoading && (
-          <Typography
-            variant="body2"
-            color="secondary"
-            style={{ marginTop: "10px" }}
+          {/* Back Button */}
+          <IconButton
+            onClick={handleGoBack}
+            style={{
+              position: "absolute",
+              top: "20px",
+              left: "20px",
+              color: "#90caf9", // Matching the primary color of the theme
+            }}
           >
-            We are working on your request. Please wait...
-          </Typography>
-        )}
+            <ArrowBackIcon fontSize="large" />
+          </IconButton>
 
-        {/* Error message */}
-        {error && (
-          <Typography
-            variant="body2"
-            color="error"
-            style={{ marginTop: "10px" }}
+          <Typography variant="h4" color="primary" gutterBottom>
+            Let's Summarize YouTube Video
+          </Typography>
+
+          {/* Input Fields */}
+          <TextField
+            label="YouTube Video URL"
+            variant="outlined"
+            fullWidth
+            value={videoUrl}
+            onChange={(e) => setVideoUrl(e.target.value)}
+            margin="normal"
+            InputLabelProps={{
+              style: { color: darkTheme.palette.text.primary },
+            }}
+          />
+
+          <Select
+            value={summaryType}
+            onChange={(e) => setSummaryType(e.target.value)}
+            fullWidth
+            variant="outlined"
+            margin="normal"
+            style={{
+              marginTop: "10px",
+              color: darkTheme.palette.text.primary,
+              backgroundColor: darkTheme.palette.background.paper,
+            }}
           >
-            {error}
-          </Typography>
-        )}
+            <MenuItem value="Detailed">Detailed</MenuItem>
+            <MenuItem value="Short">Short</MenuItem>
+          </Select>
 
-        {/* Display summary and download button */}
-        {summary && (
-          <div>
+          <Button
+            variant="contained"
+            color="primary"
+            fullWidth
+            onClick={handleSummarize}
+            disabled={isLoading} // Disable the button while loading
+            style={{ marginTop: "20px" }}
+          >
+            {isLoading ? <CircularProgress size={24} /> : "Summarize"}
+          </Button>
+
+          {/* Loading message */}
+          {isLoading && (
             <Typography
-              variant="h6"
-              color="primary"
-              style={{ marginTop: "20px" }}
-            >
-              Summary
-            </Typography>
-            <Typography variant="body1" style={{ whiteSpace: "pre-wrap" }}>
-              {summary}
-            </Typography>
-            <Button
-              variant="outlined"
-              color="primary"
-              onClick={handleDownload}
+              variant="body2"
+              color="secondary"
               style={{ marginTop: "10px" }}
             >
-              Download Summary
-            </Button>
-          </div>
-        )}
-      </Paper>
+              We are working on your request. Please wait...
+            </Typography>
+          )}
+
+          {/* Error message */}
+          {error && (
+            <Typography
+              variant="body2"
+              color="error"
+              style={{ marginTop: "10px" }}
+            >
+              {error}
+            </Typography>
+          )}
+
+          {/* Display summary and download button */}
+          {summary && (
+            <div>
+              <Typography
+                variant="h6"
+                color="primary"
+                style={{ marginTop: "20px" }}
+              >
+                Summary
+              </Typography>
+              <Typography variant="body1" style={{ whiteSpace: "pre-wrap" }}>
+                {summary}
+              </Typography>
+              <Button
+                variant="outlined"
+                color="primary"
+                onClick={handleDownload}
+                style={{ marginTop: "10px" }}
+              >
+                Download Summary
+              </Button>
+            </div>
+          )}
+        </Paper>
+      </div>
     </ThemeProvider>
   );
 };

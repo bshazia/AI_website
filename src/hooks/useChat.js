@@ -3,7 +3,7 @@ import { useState } from "react";
 import {
   fetchCsrfToken,
   sendMessageToChatGPT,
-} from "../services/chatGPTService";
+} from "../services/chatGPTService"; // Ensure correct import
 
 const useChat = () => {
   const [response, setResponse] = useState("");
@@ -24,7 +24,7 @@ const useChat = () => {
   return {
     response,
     error,
-    handleSendMessage, // No need for setMessage
+    handleSendMessage,
   };
 };
 

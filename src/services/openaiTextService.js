@@ -1,7 +1,9 @@
 // services/openaiService.js
 import axios from "axios";
 
+
 const openaiApiKey = process.env.REACT_APP_OPENAI_API_KEY;
+
 
 export const generateOpenAISummary = async (text, maxTokens = 150) => {
   try {

@@ -1,28 +1,24 @@
-const { getCaptions, summarizeText } = require("../utils/summarizationUtils");
+const {
+  getCaptions,
+  summarizeCaptions,
+} = require("../utils/summarizationUtils");
 
 exports.summarizeVideo = async (req, res) => {
-  const { youtubeVideoUrl, typeOfSummary } = req.body;
-
   try {
-    // Fetch video captions
-    const captions = await getCaptions(youtubeVideoUrl);
+    const { videoUrl, summaryType = "concise" } = req.body; // Added default summaryType if not provided
+    console.log("Received video URL:", videoUrl);
 
-    // If no captions are available, prompt user to provide a different link
-    if (!captions) {
-      return res.status(400).json({
-        error:
-          "No transcript found for this video. Please provide a link to a video with captions.",
-      });
+    const captions = await getCaptions(videoUrl);
+    if (captions) {
+      const summary = await summarizeCaptions(captions, summaryType); // Pass summaryType to summarizeCaptions
+      return res.status(200).json({ summary });
+    } else {
+      return res
+        .status(404)
+        .json({ message: "No captions available for this video." });
     }
-
-    // Summarize the available captions
-    const summary = await summarizeText(captions, typeOfSummary);
-    res.json({ summary });
   } catch (error) {
     console.error("Error summarizing video:", error);
-    res.status(500).json({
-      error:
-        "An error occurred while summarizing the video. Please try again later.",
-    });
+    return res.status(400).json({ message: error.message });
   }
 };

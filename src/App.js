@@ -1,8 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { ThemeProvider, CssBaseline } from '@mui/material';
-
-
+import axios from "axios"; 
 import { AuthProvider } from "./contexts/AuthContext";
 
 import Homepage from "./pages/Homepage";
@@ -16,14 +14,18 @@ import VerifyEmailPage from "./pages/Emailverifypage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
 import ErrorPage from "./components/ErrorPage";
 import VideoSummarizationPage from "./pages/VideoSummarizationPage";
-import Chatbot from "./components/ChatbotComponent"; // Import the Chatbot component
 import TextToImagePage from "./pages/TextToImagePage";
 import TextProcessingPage from "./pages/TextProcessingPage";
+import ImageGenerator from "./pages/ImageGenerator";
 
-
+// Axios global configuration
+axios.defaults.withCredentials = true;
+axios.defaults.headers.post["Content-Type"] = "application/json";
 const App = () => {
   return (
+    
     <Router>
+      
       <AuthProvider>
         <Routes>
           <Route path="/" element={<Homepage />} />
@@ -48,16 +50,22 @@ const App = () => {
             path="/generate-image"
             element={<ProtectedRoute element={TextToImagePage} />}
           />
-
+          <Route
+            path="/text-summary"
+            element={<ProtectedRoute element={TextProcessingPage} />}
+          />
+     
+          <Route
+            path="/ai-image-generator"
+            element={<ProtectedRoute element={ImageGenerator} />}
+          />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/check-email" element={<CheckEmail />} />
           <Route path="/verify-email" element={<VerifyEmailPage />} />
           <Route path="/reset-password" element={<ResetPasswordPage />} />
           <Route path="/error" element={<ErrorPage />} />
-          <Route path="/text-summary" element={<TextProcessingPage />} />
 
-          {/* <Route path="/imageservice" element={<Imageservice />} />
-            <Route path="/generate-image" element={<TextToImagePage />} />
+          {/* <Route path="/generate-image" element={<TextToImagePage />} />
             <Route path="/dashboard" element={<Dashboard />} /> */}
         </Routes>
         {/* <Chatbot /> */}
@@ -65,5 +73,4 @@ const App = () => {
     </Router>
   );
 };
-
 export default App;
