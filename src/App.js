@@ -17,15 +17,18 @@ import VideoSummarizationPage from "./pages/VideoSummarizationPage";
 import TextToImagePage from "./pages/TextToImagePage";
 import TextProcessingPage from "./pages/TextProcessingPage";
 import ImageGenerator from "./pages/ImageGenerator";
+import SentimentAnalysisPage from "./pages/SentimentAnalysisPage";
+import TextSummarizationPage from "./pages/TextSummarizationPage";
+import ContentGenerationPage from "./pages/ContentGenerationPage";
+import KeywordExtractionPage from "./pages/KeywordExtractionPage";
+import MathTeacherAssistantPage from "./pages/MathTeacherAssistantPage";
 
 // Axios global configuration
 axios.defaults.withCredentials = true;
 axios.defaults.headers.post["Content-Type"] = "application/json";
 const App = () => {
   return (
-    
     <Router>
-      
       <AuthProvider>
         <Routes>
           <Route path="/" element={<Homepage />} />
@@ -54,10 +57,30 @@ const App = () => {
             path="/text-summary"
             element={<ProtectedRoute element={TextProcessingPage} />}
           />
-     
+
           <Route
             path="/ai-image-generator"
             element={<ProtectedRoute element={ImageGenerator} />}
+          />
+          <Route
+            path="/ai-sentiment"
+            element={<ProtectedRoute element={SentimentAnalysisPage} />}
+          />
+          <Route
+            path="/ai-textSummary"
+            element={<ProtectedRoute element={TextSummarizationPage} />}
+          />
+          <Route
+            path="/ai-generate-content"
+            element={<ProtectedRoute element={ContentGenerationPage} />}
+          />
+          <Route
+            path="/keyword-extraction"
+            element={<ProtectedRoute element={KeywordExtractionPage} />}
+          />
+          <Route
+            path="/ask-math-teacher"
+            element={<ProtectedRoute element={MathTeacherAssistantPage} />}
           />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/check-email" element={<CheckEmail />} />

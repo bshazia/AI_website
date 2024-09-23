@@ -105,6 +105,31 @@ const Dashboard = () => {
       link: "/ai-image-generator",
       description: "Create unique AI-generated images.",
     },
+    {
+      title: "AI Sentiment",
+      link: "/ai-sentiment",
+      description: "AI Sentiment Analysis Tool",
+    },
+    {
+      title: "AI Text Summary",
+      link: "/ai-textSummary",
+      description: "AI Text Summarization Tool",
+    },
+    {
+      title: "AI Content Tool",
+      link: "/ai-generate-content",
+      description: "AI Content genrate Tool",
+    },
+    {
+      title: "AI Keyword Tool",
+      link: "/keyword-extraction",
+      description: "AI Keyword genrate Tool",
+    },
+    {
+      title: " Math Teacher",
+      link: "/ask-math-teacher",
+      description: " AI-powered math teacher",
+    },
   ];
 
   return (

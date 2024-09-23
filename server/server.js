@@ -73,6 +73,23 @@ app.use("/api", require("./routes/videoRoutes"));
 app.use("/api", require("./routes/textRoute")); 
 app.use("/api", require("./routes/transcribeVideoRoute")); 
 app.use("/api", require("./routes/TextToImageRoute")); 
+app.use("/api", require("./routes/sentimentRoute")); 
+// app.use("/api", require("./routes/textsummarizationRoute")); 
+const summarizationRoute = require("./routes/textsummarizationRoute.js");
+const contentGenerationRoute = require("./routes/contentGenerationRoute");
+const keywordExtractionRoute = require("./routes/keywordExtractionRoute");
+
+app.use("/api", contentGenerationRoute);
+
+app.use("/api", summarizationRoute);
+app.use("/api", keywordExtractionRoute);
+// server.js
+const mathAssistantRoutes = require('./routes/mathassistantRoute'); // Adjust path as needed
+app.use('/api', mathAssistantRoutes);
+
+
+
+
 
 
 app.use("/api/images", imageRoute);

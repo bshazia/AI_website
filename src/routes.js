@@ -10,9 +10,10 @@ import VideoSummarizationPage from "./pages/VideoSummarizationPage";
 import TextProcessingPage from "./pages/TextProcessingPage";
 import VideoTranscriptionPage from "./pages/VideoTranscriptionPage";
 import ImageGenerator from "./pages/ImageGenerator";
-
-
-
+import SentimentAnalysisPage from "./pages/SentimentAnalysisPage";
+import TextSummarizationPage from "./pages/TextSummarizationPage";
+import KeywordExtractionPage from "./pages/KeywordExtractionPage";
+import MathTeacherAssistantPage from "./pages/MathTeacherAssistantPage";
 const routes = [
   { path: "/", element: <Homepage /> },
   { path: "/dashboard", element: <Dashboard /> },
@@ -27,5 +28,10 @@ const routes = [
   { path: "/text-summary", element: <TextProcessingPage /> },
   { path: "/video-transcription", element: <VideoTranscriptionPage /> },
   { path: "/ai-image-generator", element: <ImageGenerator /> },
+  { path: "/ai-sentiment", element: <SentimentAnalysisPage /> },
+  { path: "/ai-textSummary", element: <TextSummarizationPage /> },
+  { path: "/ai-generate-content", element: <ContentGenerationPage /> },
+  { path: "/keyword-extraction", element: <KeywordExtractionPage /> },
+  { path: "/ask-math-teacher", element: <MathTeacherAssistantPage /> },
 ];
 export default routes;
