@@ -14,6 +14,9 @@ import SentimentAnalysisPage from "./pages/SentimentAnalysisPage";
 import TextSummarizationPage from "./pages/TextSummarizationPage";
 import KeywordExtractionPage from "./pages/KeywordExtractionPage";
 import MathTeacherAssistantPage from "./pages/MathTeacherAssistantPage";
+import TextToSpeechPage from "./pages/TextToSpeechPage";
+import AudiobookGenerator from "./components/AudiobookGenerator";
+
 const routes = [
   { path: "/", element: <Homepage /> },
   { path: "/dashboard", element: <Dashboard /> },
@@ -33,5 +36,7 @@ const routes = [
   { path: "/ai-generate-content", element: <ContentGenerationPage /> },
   { path: "/keyword-extraction", element: <KeywordExtractionPage /> },
   { path: "/ask-math-teacher", element: <MathTeacherAssistantPage /> },
+  { path: "/text-to-speech", element: <TextToSpeechPage /> },
+  { path: "/generate-audiobook", element: <AudiobookGenerator /> },
 ];
 export default routes;

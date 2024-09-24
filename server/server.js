@@ -10,6 +10,7 @@ const cors = require("cors");
 const config = require("./config/config"); 
 const bodyParser = require("body-parser");
 const imageRoute = require("./routes/imageRoutes")
+const fileUpload = require("express-fileupload");
 
 
 
@@ -64,6 +65,7 @@ app.get("/api/get-csrf-token", (req, res) => {
   res.json({ csrfToken: req.csrfToken() });
 });
 
+app.use(fileUpload());
 
 // API routes
 app.use("/api", require("./routes/authRoutes")); 
@@ -87,7 +89,10 @@ app.use("/api", keywordExtractionRoute);
 const mathAssistantRoutes = require('./routes/mathassistantRoute'); // Adjust path as needed
 app.use('/api', mathAssistantRoutes);
 
+app.use('/api',require('./routes/textToSpeechRoute')); // Adjust path as needed
 
+const audiobookRoutes = require("./routes/audiobookRoutes");
+app.use("/api", audiobookRoutes);
 
 
 

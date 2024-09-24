@@ -130,6 +130,16 @@ const Dashboard = () => {
       link: "/ask-math-teacher",
       description: " AI-powered math teacher",
     },
+    {
+      title: " convert text to audio",
+      link: "/text-to-speech",
+      description: " AI-powered audio genrator",
+    },
+    {
+      title: " Genrate Audio Books",
+      link: "/generate-audiobook",
+      description: " AI-powered audio books genrator",
+    },
   ];
 
   return (
@@ -139,7 +149,7 @@ const Dashboard = () => {
         <meta
           httpEquiv="Content-Security-Policy"
           content="
-      default-src 'self';
+      default-src 'self';  media-src 'self' blob:;
       connect-src 'self' https://aitool4all.com http://localhost:5000 https://api.openai.com https://api.openai.com/v1/completions;
       script-src 'self';
       img-src 'self' data: blob: https://oaidalleapiprodscus.blob.core.windows.net;

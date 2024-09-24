@@ -22,7 +22,8 @@ import TextSummarizationPage from "./pages/TextSummarizationPage";
 import ContentGenerationPage from "./pages/ContentGenerationPage";
 import KeywordExtractionPage from "./pages/KeywordExtractionPage";
 import MathTeacherAssistantPage from "./pages/MathTeacherAssistantPage";
-
+import TextToSpeechPage from "./pages/TextToSpeechPage";
+import AudiobookGenerator from "./components/AudiobookGenerator";
 // Axios global configuration
 axios.defaults.withCredentials = true;
 axios.defaults.headers.post["Content-Type"] = "application/json";
@@ -57,7 +58,6 @@ const App = () => {
             path="/text-summary"
             element={<ProtectedRoute element={TextProcessingPage} />}
           />
-
           <Route
             path="/ai-image-generator"
             element={<ProtectedRoute element={ImageGenerator} />}
@@ -82,12 +82,20 @@ const App = () => {
             path="/ask-math-teacher"
             element={<ProtectedRoute element={MathTeacherAssistantPage} />}
           />
+          <Route
+            path="/text-to-speech"
+            element={<ProtectedRoute element={TextToSpeechPage} />}
+          />
+          <Route
+            path="/generate-audiobook"
+            element={<ProtectedRoute element={AudiobookGenerator} />}
+          />
+
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/check-email" element={<CheckEmail />} />
           <Route path="/verify-email" element={<VerifyEmailPage />} />
           <Route path="/reset-password" element={<ResetPasswordPage />} />
           <Route path="/error" element={<ErrorPage />} />
-
           {/* <Route path="/generate-image" element={<TextToImagePage />} />
             <Route path="/dashboard" element={<Dashboard />} /> */}
         </Routes>

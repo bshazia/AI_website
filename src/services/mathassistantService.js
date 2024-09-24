@@ -16,23 +16,23 @@ export const fetchCsrfToken = async () => {
 
 
 
-export const askMathTeacher = async (question) => {
-               const csrfToken = await fetchCsrfToken(); // Fetch CSRF token
+export const askMathTeacher = async (question, level) => {
+         const csrfToken = await fetchCsrfToken(); // Fetch CSRF token
 
-               try {
-                 const response = await axios.post(
-                   `${API_URL}/api/ask-math-teacher`,
-                   { question },
-                   {
-                     headers: {
-                       "X-CSRF-Token": csrfToken, // Include CSRF token here
-                     },
-                     withCredentials: true, // Ensure credentials are sent
-                   }
-                 );
-                 return response.data.answer;
-               } catch (error) {
-                 console.error("Error asking the math teacher:", error);
-                 throw error;
-               }
-             };;
+         try {
+           const response = await axios.post(
+             `${API_URL}/api/ask-math-teacher`,
+             { question, level },
+             {
+               headers: {
+                 "X-CSRF-Token": csrfToken, // Include CSRF token here
+               },
+               withCredentials: true, // Ensure credentials are sent
+             }
+           );
+           return response.data.answer;
+         } catch (error) {
+           console.error("Error asking the math teacher:", error);
+           throw error;
+         }
+       };;

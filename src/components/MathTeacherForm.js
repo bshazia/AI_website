@@ -7,6 +7,7 @@ const MathTeacherForm = () => {
   const [question, setQuestion] = useState("");
   const [response, setResponse] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [level, setLevel] = useState("primary"); // State for the selected level
   const navigate = useNavigate(); // Initialize navigate
 
   const handleSubmit = async (e) => {
@@ -14,7 +15,7 @@ const MathTeacherForm = () => {
     setLoading(true);
     try {
       // Call the backend service to fetch the response from the math assistant
-      const answer = await askMathTeacher(question);
+      const answer = await askMathTeacher(question, level); // Pass the selected level
       setResponse(answer);
     } catch (error) {
       setResponse("Error occurred while fetching response.");
@@ -37,6 +38,19 @@ const MathTeacherForm = () => {
 
       <h1>Ask the Math Teacher</h1>
       <form onSubmit={handleSubmit} className="math-form">
+        <label>
+          Select your educational level:
+          <select
+            value={level}
+            onChange={(e) => setLevel(e.target.value)}
+            className="level-select"
+          >
+            <option value="primary">Primary</option>
+            <option value="middle">Middle School</option>
+            <option value="college">College</option>
+          </select>
+        </label>
+
         <label>
           Enter your math question:
           <textarea

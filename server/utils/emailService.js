@@ -18,7 +18,7 @@ const sendVerificationEmail = (email, token) => {
     },
   });
 
-  const verificationUrl = `http://localhost:3000/api/verify-email?token=${token}`;
+  const verificationUrl = `http://localhost:5000/api/verify-email?token=${token}`;
   const mailOptions = {
     from: `"AITOOL4ALL Support" <${process.env.EMAIL_USERNAME}>`,
     replyTo: `"AITOOL4ALL Support" <${process.env.EMAIL_USERNAME}>`,
@@ -119,7 +119,7 @@ const sendResetPasswordEmail = (email, token) => {
     },
   });
 
-  const resetUrl = `http://localhost:3000/api/reset-password?token=${token}`;
+  const resetUrl = `http://localhost:5000/api/reset-password?token=${token}`;
   const mailOptions = {
     from: process.env.EMAIL_USERNAME,
     to: email,

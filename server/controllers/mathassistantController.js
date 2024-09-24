@@ -5,14 +5,16 @@ const openai = new OpenAI({
 });
 
 exports.askMathTeacher = async (req, res) => {
-  const { question } = req.body;
+  const { question,level } = req.body;
 
   try {
     // Define the behavior of the assistant
-    const prompt = `
-      You are a math teacher. Explain the following math problem and guide them step-by-step on how to solve it:
-      Problem: ${question}
-    `;
+      const prompt = `
+        You are a math teacher for ${level} students. 
+        Explain the following math problem and guide them step-by-step on how to solve it:
+        Problem: ${question}
+      `;
+
 
     // Use the model to generate a response
     const response = await openai.chat.completions.create({

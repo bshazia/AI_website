@@ -236,36 +236,36 @@ const resetPassword = async (req, res) => {
 
 const verifyEmail = async (req, res) => {
   const { token } = req.query;
-  console.log("Received token:", token);
 
   try {
-        // Check if token is present
-        if (!token) {
-          return res.status(400).json({ error: "Token is required" });
-        }
+    // Check if token is present
+    if (!token) {
+      return res.status(400).json({ error: "Token is required" });
+    }
 
-        // Find user by token
-        const user = await User.findByVerificationToken(token);
-        console.log("User found:", user);
+    // Find user by token
+    const user = await User.findByVerificationToken(token);
+    console.log("User found:", user);
 
-        if (!user) {
-          return res.status(400).json({ error: "Invalid or expired token" });
-        }
+    if (!user) {
+      return res.status(400).json({ error: "Invalid or expired token" });
+    }
 
-        // Verify the user's email
-        await User.verifyUserEmail(user.id);
-        console.log("User email verified successfully");
-        const { email } = user; // Extract email from user object
+    // Verify the user's email
+    await User.verifyUserEmail(user.id);
+    console.log("User email verified successfully");
+    const { email } = user; // Extract email from user object
 
-        sendWelcomeEmail(email); // Send the welcome email
+    sendWelcomeEmail(email); // Send the welcome email
 
-        res.status(200).json({ message: "Email verified successfully" });
-        // After the account is successfully verified
-      } catch (error) {
+    // Redirect to front-end verification success page
+    res.redirect(`http://localhost:3000/verify-email?status=success`); // Update FRONTEND_URL with your actual front-end URL
+  } catch (error) {
     console.error("Error verifying email:", error);
-    res.status(500).json({ error: "Internal server error" });
+    res.redirect(`http://localhost:3000/verify-email?status=error`);
   }
 };
+
 
 
 
