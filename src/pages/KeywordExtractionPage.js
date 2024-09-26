@@ -1,7 +1,17 @@
 import React, { useState } from "react";
 import { extractKeywords } from "../services/keywordExtractionService";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
-
+import backgroundVideo from "../background.mp4";
+import style from "styled-components";
+const BackgroundVideo = style.video`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+`;
 const KeywordExtractionPage = () => {
         const navigate = useNavigate(); // Initialize navigate
 
@@ -27,6 +37,9 @@ const KeywordExtractionPage = () => {
               padding: "20px",
             }}
           >
+            <BackgroundVideo autoPlay loop muted>
+              <source src={backgroundVideo} type="video/mp4" />
+            </BackgroundVideo>
             <button
               onClick={() => navigate("/dashboard")}
               style={{ marginBottom: "20px" }}

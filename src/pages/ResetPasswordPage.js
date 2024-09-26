@@ -12,7 +12,17 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as yup from "yup";
 import authService from "../services/authService";
 import axios from "axios";
-
+import backgroundVideo from "../background.mp4";
+import style from "styled-components";
+const BackgroundVideo = style.video`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+`;
 const { resetPassword } = authService;
 
 const Container = styled(Box)({
@@ -106,7 +116,9 @@ const ResetPasswordPage = () => {
 
   if (!token) {
     return (
+     
       <Container>
+        
         <Typography variant="h6">Invalid or expired token.</Typography>
         <Button
           variant="outlined"

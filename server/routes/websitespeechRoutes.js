@@ -1,8 +1,8 @@
 // routes/websitespeechRoutes.js
 const express = require("express");
 const router = express.Router();
-const { readText } = require("../controllers/speechController");
-const { csrfProtection } = require("../middleware/csrf");
+const { readText } = require("../controllers/websitespeechController");
+const { csrfProtection } = require("../middleware/csrfProtection");
 
 router.post("/read-text", csrfProtection, readText);
 

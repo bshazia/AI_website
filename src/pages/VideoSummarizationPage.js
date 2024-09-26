@@ -15,7 +15,17 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { saveAs } from "file-saver";
 import { useVideoSummarization } from "../hooks/useVideoSummarization";
-
+import backgroundVideo from "../background.mp4";
+import style from "styled-components";
+const BackgroundVideo = style.video`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+`;
 // Create a dark theme using MUI's createTheme
 const darkTheme = createTheme({
   palette: {
@@ -59,16 +69,19 @@ const VideoSummarizationPage = () => {
   return (
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
+      <BackgroundVideo autoPlay loop muted>
+        <source src={backgroundVideo} type="video/mp4" />
+      </BackgroundVideo>
 
       {/* Make the entire container scrollable */}
-      <div
+      {/* <div
         style={{
           minHeight: "100vh",
           overflowY: "auto", // Enables vertical scrolling
           backgroundColor: darkTheme.palette.background.default,
           padding: "20px",
         }}
-      >
+      > */}
         <Paper
           style={{
             padding: "20px",
@@ -182,7 +195,7 @@ const VideoSummarizationPage = () => {
             </div>
           )}
         </Paper>
-      </div>
+      {/* </div> */}
     </ThemeProvider>
   );
 };

@@ -1,7 +1,17 @@
 import React, { useState } from "react";
 import { generateDalleImage } from "../services/dalleService";
 import { useNavigate } from "react-router-dom";
-
+import backgroundVideo from "../background.mp4";
+import style from "styled-components";
+const BackgroundVideo = style.video`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+`;
 const TextToImagePage = () => {
   const [prompt, setPrompt] = useState("");
   const [imageUrl, setImageUrl] = useState("");
@@ -58,6 +68,9 @@ const TextToImagePage = () => {
         position: "relative",
       }}
     >
+      <BackgroundVideo autoPlay loop muted>
+        <source src={backgroundVideo} type="video/mp4" />
+      </BackgroundVideo>
       {/* AI-themed background */}
       <div
         className="ai-theme-background"

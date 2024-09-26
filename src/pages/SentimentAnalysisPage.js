@@ -1,7 +1,17 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 import { analyzeSentiment } from "../services/sentimentApi";
-
+import backgroundVideo from "../background.mp4";
+import style from "styled-components";
+const BackgroundVideo = style.video`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+`;
 const SentimentAnalysisPage = () => {
   const navigate = useNavigate(); // Initialize navigate
   const [text, setText] = useState("");
@@ -22,6 +32,9 @@ const SentimentAnalysisPage = () => {
     <div
       style={{ backgroundColor: "#0e0e0e", color: "#f0f0f0", padding: "20px" }}
     >
+      <BackgroundVideo autoPlay loop muted>
+        <source src={backgroundVideo} type="video/mp4" />
+      </BackgroundVideo>
       <button
         onClick={() => navigate("/dashboard")}
         style={{ marginBottom: "20px" }}

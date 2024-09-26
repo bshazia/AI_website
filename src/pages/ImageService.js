@@ -14,7 +14,17 @@ import {
 import RotateImage from "../components/imagecomponents/Rotate";
 import CropImage from "../components/imagecomponents/Crop";
 import ChangeFileType from "../components/imagecomponents/ImageConverter";
-
+import backgroundVideo from "../background.mp4";
+import style from "styled-components";
+const BackgroundVideo = style.video`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+`;
 // Styled components
 const Header = styled("header")({
   backgroundColor: "#121212",
@@ -86,6 +96,9 @@ const ImageService = () => {
         overflowY: "auto",
       }}
     >
+      <BackgroundVideo autoPlay loop muted>
+        <source src={backgroundVideo} type="video/mp4" />
+      </BackgroundVideo>
       <Header>
         <Container>
           <Logo variant="h4">AI For Gen Z</Logo>

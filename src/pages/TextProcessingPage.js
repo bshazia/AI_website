@@ -7,7 +7,17 @@ import {
 } from "../services/textExtractionService";
 import { summarizeText } from "../services/textSummarizationService";
 import { generateOpenAISummary } from "../services/openaiTextService";
-
+import backgroundVideo from "../background.mp4";
+import style from "styled-components";
+const BackgroundVideo = style.video`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+`;
 const TextProcessingPage = () => {
   const [file, setFile] = useState(null);
   const [url, setUrl] = useState("");
@@ -69,6 +79,9 @@ const TextProcessingPage = () => {
         padding: "20px",
       }}
     >
+      <BackgroundVideo autoPlay loop muted>
+        <source src={backgroundVideo} type="video/mp4" />
+      </BackgroundVideo>
       <div className="input-section">
         <input
           type="file"

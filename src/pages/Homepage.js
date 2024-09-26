@@ -1,4 +1,3 @@
-// src/pages/HomePage.js
 import React from "react";
 import Header from "../components/Header";
 import HeroSection from "../components/HeroSection";
@@ -8,6 +7,8 @@ import EntryPage from "../components/EntryPage";
 import styled from "styled-components";
 import "../styles/HomePage.css"; // Ensure this path is correct
 import ToolsSection from "../components/ToolsSection";
+import AccessibilityReader from "../components/AccessibilityReader"; // Import the Accessibility Reader component
+import backgroundVideo from "../background.mp4"; 
 
 const BackgroundVideo = styled.video`
   position: fixed;
@@ -45,7 +46,7 @@ const HomePage = () => {
   return (
     <HomePageContainer>
       <BackgroundVideo autoPlay loop muted>
-        <source src="path/to/your/background-video.mp4" type="video/mp4" />
+        <source src={backgroundVideo} type="video/mp4" />
       </BackgroundVideo>
       <Header
         onLoginClick={() => handleAuthToggle("login")}
@@ -60,8 +61,10 @@ const HomePage = () => {
           />
         </div>
       )}
+
       <HeroSection />
       <ToolsSection />
+
       <WhyUseSection />
       <ContributeSection />
     </HomePageContainer>

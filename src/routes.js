@@ -16,6 +16,7 @@ import KeywordExtractionPage from "./pages/KeywordExtractionPage";
 import MathTeacherAssistantPage from "./pages/MathTeacherAssistantPage";
 import TextToSpeechPage from "./pages/TextToSpeechPage";
 import AudiobookGenerator from "./components/AudiobookGenerator";
+import AccessibilityReader from "./components/AccessibilityReader";
 
 const routes = [
   { path: "/", element: <Homepage /> },
@@ -38,5 +39,6 @@ const routes = [
   { path: "/ask-math-teacher", element: <MathTeacherAssistantPage /> },
   { path: "/text-to-speech", element: <TextToSpeechPage /> },
   { path: "/generate-audiobook", element: <AudiobookGenerator /> },
+  { path: "/read-text", element: <AccessibilityReader /> },
 ];
 export default routes;

@@ -93,6 +93,7 @@ app.use('/api',require('./routes/textToSpeechRoute')); // Adjust path as needed
 
 const audiobookRoutes = require("./routes/audiobookRoutes");
 app.use("/api", audiobookRoutes);
+app.use('/api',require('./routes/websitespeechRoutes')); // Adjust path as needed
 
 
 

@@ -16,6 +16,17 @@ import {
 import { styled } from "@mui/system";
 import DOMPurify from "dompurify";
 
+import backgroundVideo from "../background.mp4"; 
+import style from "styled-components";
+const BackgroundVideo = style.video`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+`;
 // Styled components for AI/robotic theme with gradient and sticky header
 const Header = styled("header")({
   background: "linear-gradient(90deg, #0f0c29, #302b63, #24243e)", // Gradient background
@@ -159,7 +170,9 @@ const Dashboard = () => {
     "
         />
       </Helmet>
-
+      <BackgroundVideo autoPlay loop muted>
+        <source src={backgroundVideo} type="video/mp4" />
+      </BackgroundVideo>
       <Header>
         <Container>
           <Logo variant="h4">AI For Gen Z</Logo>
@@ -177,7 +190,7 @@ const Dashboard = () => {
           </Box>
         </Container>
       </Header>
-  
+
       <Container>
         <ContentSection>
           <Typography variant="h4" component="h1" gutterBottom>
@@ -190,7 +203,7 @@ const Dashboard = () => {
           <Grid container spacing={4} justifyContent="center">
             {features.map((feature, index) => (
               <Grid item xs={12} sm={6} md={4} key={index}>
-                <Card
+                {/* <Card
                   sx={{
                     background: "linear-gradient(145deg, #1e1e2f, #23253d)",
                     color: "#fff",
@@ -217,7 +230,7 @@ const Dashboard = () => {
                       Go to {feature.title}
                     </Button>
                   </CardActions>
-                </Card>
+                </Card> */}
               </Grid>
             ))}
           </Grid>
