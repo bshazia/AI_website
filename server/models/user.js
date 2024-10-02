@@ -1,14 +1,16 @@
 const bcrypt = require("bcrypt");
-const mysql = require("mysql2/promise");
+// const mysql = require("mysql2/promise");
+const pool = require("../config/db"); // Import the pool from db.js
+
 const validator = require("validator"); // For input validation
 const config = require("../config/config");
 
-const pool = mysql.createPool({
-  host: config.db.host,
-  user: config.db.user,
-  password: config.db.password,
-  database: config.db.name,
-});
+// const pool = mysql.createPool({
+//   host: config.db.host,
+//   user: config.db.user,
+//   password: config.db.password,
+//   database: config.db.name,
+// });
 
 const User = {
   create: async (userData) => {

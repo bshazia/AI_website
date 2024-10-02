@@ -44,7 +44,6 @@ const authenticateToken = async (req, res, next) => {
     // Verify JWT token
     const decoded = jwt.verify(token, config.jwtSecret);
     req.user = decoded;
-
     next();
   } catch (error) {
     res.status(400).json({ error: "Invalid token" });
@@ -54,5 +53,5 @@ const authenticateToken = async (req, res, next) => {
 module.exports = {
   registerRules,
   validate,
-  authenticateToken, // Export the updated function
+  authenticateToken,
 };

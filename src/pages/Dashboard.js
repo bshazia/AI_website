@@ -151,6 +151,11 @@ const Dashboard = () => {
       link: "/generate-audiobook",
       description: " AI-powered audio books genrator",
     },
+    {
+      title: " Interview prep",
+      link: "/interview-prep",
+      description: " AI-powered interviewPrep ",
+    },
   ];
 
   return (

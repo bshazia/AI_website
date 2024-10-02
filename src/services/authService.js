@@ -1,7 +1,6 @@
 // src/services/authService.js
 import axios from "axios";
 
-const API_URL = process.env.REACT_APP_API_URL;
 
 // Register user
 const register = async (userData, csrfToken) => {
@@ -32,6 +31,8 @@ const login = async (userData, csrfToken) => {
       withCredentials: true,
     }
   );
+  const token = response.data.token; 
+  localStorage.setItem("token", token); 
   return response.data;
 };
 

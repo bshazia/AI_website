@@ -76,28 +76,19 @@ app.use("/api", require("./routes/textRoute"));
 app.use("/api", require("./routes/transcribeVideoRoute")); 
 app.use("/api", require("./routes/TextToImageRoute")); 
 app.use("/api", require("./routes/sentimentRoute")); 
-// app.use("/api", require("./routes/textsummarizationRoute")); 
 const summarizationRoute = require("./routes/textsummarizationRoute.js");
 const contentGenerationRoute = require("./routes/contentGenerationRoute");
 const keywordExtractionRoute = require("./routes/keywordExtractionRoute");
-
 app.use("/api", contentGenerationRoute);
-
 app.use("/api", summarizationRoute);
 app.use("/api", keywordExtractionRoute);
-// server.js
-const mathAssistantRoutes = require('./routes/mathassistantRoute'); // Adjust path as needed
+const mathAssistantRoutes = require('./routes/mathassistantRoute'); 
 app.use('/api', mathAssistantRoutes);
-
-app.use('/api',require('./routes/textToSpeechRoute')); // Adjust path as needed
-
+app.use('/api',require('./routes/textToSpeechRoute')); 
 const audiobookRoutes = require("./routes/audiobookRoutes");
 app.use("/api", audiobookRoutes);
-app.use('/api',require('./routes/websitespeechRoutes')); // Adjust path as needed
-
-
-
-
+app.use('/api',require('./routes/websitespeechRoutes')); 
+app.use('/api',require('./routes/interviewRoutes')); 
 app.use("/api/images", imageRoute);
 
 
@@ -118,14 +109,16 @@ if (process.env.NODE_ENV === "production") {
 
 // Test the database connection and list tables (development only)
 if (process.env.NODE_ENV !== "production") {
-  const db = require("./config/db"); // Ensure database connection is required here
-  db.query("SHOW TABLES", (err, results) => {
-    if (err) {
+  const db = require("./config/db"); 
+
+  // Use promise-based syntax instead of callbacks
+  db.query("SHOW TABLES")
+    .then(([results]) => {
+     // console.log("Tables in the database:", results);
+    })
+    .catch((err) => {
       console.error("Error listing tables:", err);
-    } else {
-      // console.log("Tables in the database:", results);
-    }
-  });
+    });
 }
 
 // Error handling middleware (only for production)
